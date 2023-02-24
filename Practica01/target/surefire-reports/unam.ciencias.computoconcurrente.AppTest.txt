@@ -1,0 +1,5 @@
+-------------------------------------------------------------------------------
+Test set: unam.ciencias.computoconcurrente.AppTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in unam.ciencias.computoconcurrente.AppTest
+main  Time elapsed: 0 s

@@ -1,0 +1,32 @@
+-------------------------------------------------------------------------------
+Test set: unam.ciencias.computoconcurrente.MatrixUtilsTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 0.042 s <<< FAILURE! - in unam.ciencias.computoconcurrente.MatrixUtilsTest
+findaverageConcurrent2  Time elapsed: 0.029 s  <<< ERROR!
+java.lang.Error: 
+Unresolved compilation problem: 
+	Syntax error, insert "}" to complete ClassBody
+
+	at unam.ciencias.computoconcurrente.MatrixUtilsTest.findaverageConcurrent2(MatrixUtilsTest.java:51)
+
+findAverageConcurrent  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.Error: 
+Unresolved compilation problem: 
+	Syntax error, insert "}" to complete ClassBody
+
+	at unam.ciencias.computoconcurrente.MatrixUtilsTest.findAverageConcurrent(MatrixUtilsTest.java:26)
+
+findAverage  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.Error: 
+Unresolved compilation problem: 
+	Syntax error, insert "}" to complete ClassBody
+
+	at unam.ciencias.computoconcurrente.MatrixUtilsTest.findAverage(MatrixUtilsTest.java:13)
+
+findAverage2  Time elapsed: 0.002 s  <<< ERROR!
+java.lang.Error: 
+Unresolved compilation problem: 
+	Syntax error, insert "}" to complete ClassBody
+
+	at unam.ciencias.computoconcurrente.MatrixUtilsTest.findAverage2(MatrixUtilsTest.java:39)
+
