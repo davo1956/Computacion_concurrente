@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.11.16)  23 FEB 2023 23:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.11.16)  26 FEB 2023 02:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -163,42 +163,51 @@ File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
 File: listings.cfg 2020/03/24 1.8d listings configuration
 ))
 Package: listings 2020/03/24 1.8d (Carsten Heinz)
- (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+ (/usr/share/texmf-dist/tex/generic/schemata/schemata.sty
+Package: schemata 2021/02/27 1.4 generic package to aid construction of topical categories
+\@schemata@rhs=\box54
+\@schemata@lhs=\box55
+\@schemata@rheight=\dimen161
+\@schemata@lheight=\dimen162
+\@schemata@one=\dimen163
+\@schemata@two=\dimen164
+\@schemata@three=\dimen165
+) (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-04-14 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count279
-\l__pdf_internal_box=\box54
+\l__pdf_internal_box=\box56
 ) (./main.aux
 LaTeX Info: Redefining \. on input line 8.
 LaTeX Info: Redefining \% on input line 8.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Info: Redefining \. on input line 22.
-LaTeX Info: Redefining \% on input line 22.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Info: Redefining \. on input line 23.
+LaTeX Info: Redefining \% on input line 23.
  (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count280
-\scratchdimen=\dimen161
-\scratchbox=\box55
+\scratchdimen=\dimen166
+\scratchbox=\box57
 \nofMPsegments=\count281
 \nofMParguments=\count282
 \everyMPshowfont=\toks24
 \MPscratchCnt=\count283
-\MPscratchDim=\dimen162
+\MPscratchDim=\dimen167
 \MPnumerator=\count284
 \makeMPintoPDFobject=\count285
 \everyMPtoPDFconversion=\toks25
@@ -244,7 +253,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 22.
+(lastpage)             ! on input line 23.
 (/usr/share/texmf-dist/tex/latex/pdflscape/pdflscape.sty
 Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
  (/usr/share/texmf-dist/tex/latex/graphics/lscape.sty
@@ -256,36 +265,151 @@ Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 <Portada.pdf, id=1, 597.50829pt x 845.0471pt>
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf>
-Package pdftex.def Info: Portada.pdf  used on input line 23.
+Package pdftex.def Info: Portada.pdf  used on input line 24.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf>
-Package pdftex.def Info: Portada.pdf  used on input line 23.
+Package pdftex.def Info: Portada.pdf  used on input line 24.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 <Portada.pdf, id=4, page=1, 597.50829pt x 845.0471pt>
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 23.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 23.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 23.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 23.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 23.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
  [1
 
- <./Portada.pdf{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}>] 
+ <./Portada.pdf{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}>]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 43.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 43.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 43.
+<images/esquema1.jpeg, id=58, 1284.8pt x 1084.05pt>
+File: images/esquema1.jpeg Graphic file (type jpg)
+<use images/esquema1.jpeg>
+Package pdftex.def Info: images/esquema1.jpeg  used on input line 74.
+(pdftex.def)             Requested size: 321.19922pt x 271.01184pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 74--75
+
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
+
+ []
+
+<images/esquema2.jpeg, id=66, 1284.8pt x 748.7975pt>
+File: images/esquema2.jpeg Graphic file (type jpg)
+<use images/esquema2.jpeg>
+Package pdftex.def Info: images/esquema2.jpeg  used on input line 85.
+(pdftex.def)             Requested size: 385.44298pt x 224.64098pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
+
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[3 <./images/esquema1.jpeg> <./images/esquema2.jpeg>]
+Underfull \hbox (badness 10000) in paragraph at lines 88--90
+
+ []
+
+<images/esquema3.jpeg, id=70, 1194.4625pt x 1284.8pt>
+File: images/esquema3.jpeg Graphic file (type jpg)
+<use images/esquema3.jpeg>
+Package pdftex.def Info: images/esquema3.jpeg  used on input line 91.
+(pdftex.def)             Requested size: 358.3415pt x 385.44298pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 94--95
+
+ []
+
+<images/esquema4.jpeg, id=71, 1284.8pt x 710.655pt>
+File: images/esquema4.jpeg Graphic file (type jpg)
+<use images/esquema4.jpeg>
+Package pdftex.def Info: images/esquema4.jpeg  used on input line 96.
+(pdftex.def)             Requested size: 449.68674pt x 248.73297pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 96--97
+
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[4 <./images/esquema3.jpeg>]
+Underfull \hbox (badness 10000) in paragraph at lines 128--129
+
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[5 <./images/esquema4.jpeg>]
+Underfull \hbox (badness 10000) in paragraph at lines 130--131
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--136
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--139
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 155--162
+
+ []
+
+
 AED: lastpage setting LastPage
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -294,23 +418,23 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[2] (./main.aux
+[6] (./main.aux
 LaTeX Info: Redefining \. on input line 8.
 LaTeX Info: Redefining \% on input line 8.
 ) ) 
 Here is how much of TeX's memory you used:
- 6166 strings out of 478238
- 96203 string characters out of 5850455
- 415175 words of memory out of 5000000
- 24367 multiletter control sequences out of 15000+600000
- 470470 words of font info for 32 fonts, out of 8000000 for 9000
+ 6298 strings out of 478238
+ 98554 string characters out of 5850455
+ 424086 words of memory out of 5000000
+ 24481 multiletter control sequences out of 15000+600000
+ 473860 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,17n,64p,246b,430s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on main.pdf (2 pages, 331132 bytes).
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
+Output written on main.pdf (6 pages, 851851 bytes).
 PDF statistics:
- 76 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 110 PDF objects out of 1000 (max. 8388607)
+ 66 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
