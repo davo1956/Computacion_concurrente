@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: unam.ciencias.computoconcurrente.MatrixUtilsTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in unam.ciencias.computoconcurrente.MatrixUtilsTest
+findaverageConcurrent2  Time elapsed: 0 s
+findAverageConcurrent  Time elapsed: 0 s
+findAverage  Time elapsed: 0 s
+findAverage2  Time elapsed: 0.001 s
