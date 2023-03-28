@@ -1,0 +1,578 @@
+<HTML>
+<HEAD>
+<TITLE>Applets using XtangoAnimator</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<P>
+These applets have been tested (no problems) with Netscape 3.x on
+Solaris, Linux, and Windows 95;
+Microsoft Internet Explorer 3.x on Windows 95;
+and the Sun Microsystems <TT>appletviewer</TT> distributed with JDK 1.1;
+however, problems have been reported with Netscape 4.
+At the bottom of this page are links for downloading the source code
+for the Java applets on this page.
+</P>
+
+<HR>
+
+<P>
+This is an animation of the bubble sort algorithm.
+The random positive numbers to be sorted are represented by
+red outline circles whose distance from the bottom
+of the animation frame is proportional to their magnitude.
+Each circle is ``bubbled'' up to where it belongs in the sorted array
+by comparing it to the circles on its right.
+The current circle is changed to solid blue.
+Each pair of circles being compared is connected briefly by a green line.
+If the circle on the right is smaller, the connecting line is
+changed to red and the two circles swap positions.
+Each circle changes to solid black when it moves into its final sorted
+position.
+<PRE>
+private static void bubbleSort(int[] a) { // into non-decreasing order
+   for (int i = a.length - 1; i &gt;= 0; i--) {
+      for (int j = 0; j &lt; i; j++) {
+         xa.color("C"+j, Color.blue);     // make candidate to
+         xa.fill("C"+j, xa.SOLID);        // bubble solid blue
+         xa.delay(1);
+         // momentarily connect the two icons compared with a line
+         xa.pointLine("temp", scaleX(j), scaleY(a[j]), scaleX(j+1),
+            scaleY(a[j+1]), Color.green, xa.THICK);
+         xa.delay(1);
+         if (a[j] &gt; a[j+1]) {             // swap the icon locations
+            xa.color("temp", Color.red);
+            xa.delay(1);
+            xa.moveAsync("C"+j, scaleX(j+1), scaleY(a[j]));
+            xa.move("C"+(j+1), scaleX(j), scaleY(a[j+1]));
+            xa.swapIds("C"+j, "C"+(j+1)); // swap ids of the icons
+            int temp = a[j+1]; a[j+1] = a[j]; a[j] = temp;
+         } else {
+            xa.fill("C"+j, xa.OUTLINE);   // make the smaller icon ...
+            xa.color("C"+j, Color.red);      // ... outline red ...
+            xa.delay(1);
+            xa.color("C"+(j+1), Color.blue); // ... and the larger ...
+            xa.fill("C"+(j+1), xa.SOLID);    // ... solid blue
+            xa.delay(1);
+         }
+         xa.delete("temp");
+      }
+      // color the icon black to indicate it is in final position
+      xa.color("C"+i, Color.black);
+      xa.delay(1);
+   }
+   xa.fill("C0", xa.SOLID);
+   xa.delay(1);
+}
+</PRE>
+At the bottom of the animation window is a button and text field
+showing the default values of some of the command line arguments.
+Alter these as needed and click the button.
+<UL>
+  <P>
+   <TT>-n</TT>: number of numbers to sort<BR>
+   <TT>-r</TT>: range of random numbers generated to sort (from 1)<BR>
+  </P>
+</UL>
+To start the animation, push the ``Start'' button after
+checking the command line arguments text field and clicking that button.
+Check the browser's Java console for error messages.
+<APPLET CODE="XtangoApplet.class" WIDTH=500 HEIGHT=600>
+<PARAM NAME="command" VALUE="bubbleSort -n25 -r1000">
+An applet appears here if you have a Java-enabled browser.
+</APPLET>
+</P>
+
+<HR>
+
+<P>
+This is an animation of the dining philosophers.
+Five philosophers, represented by circles, sit around a bowl of spaghetti.
+Each thinks for a while, gets hungry, and wants to eat.
+Thinking philosophers are outline black, hungry philosophers are solid green,
+and eating ones are solid blue.
+There are five forks alternating with the philosophers around the table.
+A philosopher must have sole possession of both its left and right
+forks in order to eat.
+The forks are shown as gray lines while a philosopher eats.
+<PRE>
+private void eat() {
+   int napping = 1 + (int) random(napEat);
+   xa.color("phil"+id, Color.blue);                 // animation
+   xa.fill("phil"+id, xa.SOLID);                    // animation
+   nap(napping);
+}
+
+public void run() {
+   while (true) {
+      think();
+      xa.color("phil"+id, Color.green);             // animation
+      xa.fill("phil"+id, xa.SOLID);                 // animation
+      ds.takeForks(id);
+      eat();
+      ds.putForks(id);
+      xa.fill("phil"+id, xa.OUTLINE);               // animation
+      xa.color("phil"+id, Color.black);             // animation
+   }
+}
+
+public void takeForks(int i) {
+   P(mutex);
+   state[i] = HUNGRY;
+   test(i);
+   V(mutex);
+   P(self[i]);
+   xa.color("fork"+i, Color.gray);                  // animation
+   xa.color("fork"+right(i), Color.gray);           // animation
+}
+
+public void putForks(int i) {
+   P(mutex);
+   state[i] = THINKING;
+   xa.color("fork"+i, Color.white);                 // animation
+   xa.color("fork"+right(i), Color.white);          // animation
+   test(left(i));
+   test(right(i));
+   V(mutex);
+}
+</PRE>
+At the bottom of the animation window is a button and text field
+showing the default values of some of the command line arguments.
+Alter these as needed and click the button.
+<UL>
+  <P>
+   <TT>-p</TT>: number of philosophers<BR>
+   <TT>-R</TT>: number of seconds to run<BR>
+  </P>
+</UL>
+To start the animation, push the ``Start'' button after
+checking the command line arguments text field and clicking that button.
+<APPLET CODE="XtangoApplet.class" WIDTH=500 HEIGHT=600>
+<PARAM NAME="command" VALUE="diningPhilosophers -p5 -R180">
+An applet appears here if you have a Java-enabled browser.
+</APPLET>
+</P>
+
+<HR>
+
+<P>
+This is an animation of the ``distributed'' dining philosophers.
+There is no central server algorithm allocating the forks based on global
+knowledge of the states of the philosophers.
+Each fork moves back and forth between the two philosophers on
+either side of it as the philosophers eat with the fork.
+The two philosophers send messages back and forth to coordinate their
+use of the fork between them.
+A clean fork is represented with a gray line.
+A fork is yellow when currently being used by a philosopher to eat.
+When a philosopher finishes eating, its two forks turn orange.
+When a philosopher passes a fork to its neighbor,
+the fork changes to gray.
+In order to prevent starvation, a philosopher is required to relinquish
+a dirty fork, one it last used to eat,
+to a hungry neighbor.
+<PRE>
+public void takeForks(int id) {
+   xa.color("phil"+id, Color.green);                // animation
+   xa.fill("phil"+id, xa.SOLID);                    // animation
+   myChannel.send(new Hungry());  // non blocking
+   P(eat);                  // wait for empty message
+   xa.color("phil"+id, Color.blue);                 // animation
+   xa.fill("phil"+id, xa.SOLID);                    // animation
+}
+
+public void putForks(int id) {
+   xa.fill("phil"+id, xa.OUTLINE);                  // animation
+   xa.color("phil"+id, Color.black);                // animation
+   V(releaseForks);         // send empty message
+}
+
+public void run() {
+   ...
+   while (true) {
+      sc = new ServantCondition(hungry, dirtyL, dirtyR);
+      message = myChannel.receive(sc);
+      if (message instanceof Hungry) {
+         hungry = true;
+         if (!haveR) rightServantChannel.send(new NeedL());
+         if (!haveL) leftServantChannel.send(new NeedR());
+         while (!(haveR && haveL)) {  // while hungry, wait for forks
+            sc = new ServantCondition(hungry, dirtyL, dirtyR);
+            message = myChannel.receive(sc);
+            if (message instanceof PassL) {  // left servant sends fork
+// Move the fork from where it was to be next to this philosopher and then
+// change its symbol to be light gray, i.e., not dirty.
+               xa.moveTo(forkL, holderL);
+               xa.color(forkL, Color.lightGray);
+               xa.fill("phil"+id, xa.HALF);
+               haveL = true; dirtyL = false;
+            } else if (message instanceof PassR) {
+               // right servant sends fork
+// Ditto.
+               xa.moveTo(forkR, holderR);
+               xa.color(forkR, Color.lightGray);
+               xa.fill("phil"+id, xa.HALF);
+               haveR = true; dirtyR = false;
+            } else if (message instanceof NeedL) {  // dirtyL is true
+               // hungry philosopher must relinquish dirty fork
+               // to avoid starvation
+               haveL = false; dirtyL = false;
+               leftServantChannel.send(new PassR());
+               leftServantChannel.send(new NeedR());
+               xa.color("phil"+id, Color.red);
+            } else if (message instanceof NeedR) {  // dirtyR is true
+               // hungry philosopher must relinquish dirty fork
+               // to avoid starvation
+               haveR = false; dirtyR = false;
+               rightServantChannel.send(new PassL());
+               rightServantChannel.send(new NeedL());
+               xa.color("phil"+id, Color.red);
+         }
+         V(eat); dirtyR = true; dirtyL = true;
+// Now that the philosopher is eating, its forks are getting dirty so
+// change their symbols to be yellow.
+         xa.color(forkL, Color.yellow);
+         xa.color(forkR, Color.yellow);
+         P(releaseForks);
+         hungry = false;
+// Now that the philosopher has finished eating, its forks are dirty so
+// change their symbols to be orange.
+         xa.color(forkL, Color.orange);
+         xa.color(forkR, Color.orange);
+      } else if (message instanceof NeedR) {
+         // not hungry and have right fork
+         haveR = false; dirtyR = false; rightServantChannel.send(new PassL());
+      } else if (message instanceof NeedL) {
+         // not hungry and have left fork
+         haveL = false; dirtyL = false; leftServantChannel.send(new PassR());
+   }
+}
+</PRE>
+At the bottom of the animation window is a button and text field
+showing the default values of some of the command line arguments.
+Alter these as needed and click the button.
+<UL>
+  <P>
+   <TT>-p</TT>: number of philosophers<BR>
+   <TT>-R</TT>: number of seconds to run<BR>
+  </P>
+</UL>
+To start the animation, push the ``Start'' button after
+checking the command line arguments text field and clicking that button.
+<APPLET CODE="XtangoApplet.class" WIDTH=500 HEIGHT=600>
+<PARAM NAME="command" VALUE="distributedPhilosophers -p5 -R180">
+An applet appears here if you have a Java-enabled browser.
+</APPLET>
+</P>
+
+<HR>
+
+<P>
+This is an animation of the parallel quick sort algorithm.
+There are six CPUs available and one initial partition of random
+positive numbers to sort.
+The left-most circle is chosen as the pivot point of the partition.
+The circles less than the pivot are swept to the lower left quadrant
+of the partition and the circles larger than the pivot are swept
+to the upper right quadrant of the partition.
+Then the pivot circle is moved to the middle of the partition
+and changed to solid black.
+This leaves two new partitions to which the algorithm is applied
+recursively by any two available CPUs.
+The circles in a partition take on the solid color of the CPU
+working on them, except the pivot, which is outline.
+<PRE>
+private static void quickSort(int worker, int left, int right) {
+   int pivot = nums[left]; int l = left, r = right;
+   // enclose what this worker is working on in a black outline rectangle
+   int ymin = minn(nums, left, right);
+   int ymax = maxx(nums, left, right);
+   float xpos, ypos, xsize, ysize;
+   xpos = scaleX(left); ypos = scaleY(ymin);
+   xsize = scaleX(right-left); ysize = scaleY(ymax-ymin);
+   xa.rectangle("rect"+worker, xpos, ypos, xsize, ysize, Color.black, xa.OUTLINE);
+   xa.delay(1);
+   // change items sorted to this worker's color
+   for (int i = left; i &lt;= right; i++) {
+      xa.color("nums"+i, colors[worker]);   // would be better to do
+      xa.fill("nums"+i, xa.SOLID);          // these as a batch i.e.
+   }                                        // no frameDelay
+   xa.delay(1);
+   // make pivot outline color
+   xa.fill("nums"+left, xa.OUTLINE);
+   // draw a black horizontal line from the pivot across the rectangle
+   xpos = scaleX(left); ypos = scaleY(pivot);
+   xsize = scaleX(right-left); ysize = 0.0f;
+   xa.line("lineH"+worker, xpos, ypos, xsize, ysize, Color.black, xa.THIN);
+   // draw two vertical lines at left+1 and right
+   xpos = scaleX(l+1); ypos = scaleY(pivot);
+   xsize = 0.0f; ysize = scaleY(ymax-pivot);
+   xa.line("lineVL"+worker, xpos, ypos, xsize, ysize, Color.black, xa.THIN);
+   xpos = scaleX(r); ypos = scaleY(ymin);
+   xsize = 0.0f; ysize = scaleY(pivot-ymin);
+   xa.line("lineVR"+worker, xpos, ypos, xsize, ysize, Color.black, xa.THIN);
+   xa.delay(1);
+   boolean done = false;
+   while (!done) {
+      if (nums[l+1] &gt; pivot) {
+         while (r &gt; l+1 && nums[r] &gt; pivot) { r--;
+            // move the right vertical line one to the left
+            if (!done) {
+               xa.jumpRelative("lineVR"+worker, scaleX(-1), 0.0f);
+            }
+         }
+         if (r &gt; l+1) { l++;
+            int temp = nums[r]; nums[r] = nums[l]; nums[l] = temp;
+            done = l &gt;= r-1;
+            // swap locations and ids of the objects
+            xa.moveAsync("nums"+r, scaleX(l), scaleY(nums[l]));
+            xa.move("nums"+l, scaleX(r), scaleY(nums[r]));
+            xa.swapIds("nums"+r, "nums"+l);
+            // move the left vertical line one to the right
+            if (!done) {
+               xa.jumpRelative("lineVL"+worker, scaleX(1), 0.0f);
+            }
+         } else done = true;
+      } else { l++; done = l &gt;= r;
+         // move the left vertical line one to the right
+         if (!done) {
+            xa.jumpRelative("lineVL"+worker, scaleX(1), 0.0f);
+         }
+      }
+   }
+   int temp = nums[left]; nums[left] = nums[l]; nums[l] = temp;
+   // swap locations and ids of the objects
+   xa.moveAsync("nums"+left, scaleX(l), scaleY(nums[l]));
+   xa.move("nums"+l, scaleX(left), scaleY(nums[left]));
+   xa.swapIds("nums"+left, "nums"+l);
+   if (right-(l+1) &gt; 0) send(task, new Task(l+1, right));
+   else if (right-(l+1) == 0) {  V(doneCount);
+      // color the object solid black to indicate it is in final position
+      xa.color("nums"+right, Color.black);
+      xa.fill("nums"+right, xa.SOLID);
+   }
+   // delete the line and rectangle objects
+   xa.delete("rect"+worker);
+   xa.delete("lineH"+worker);
+   xa.delete("lineVL"+worker);
+   xa.delete("lineVR"+worker);
+   V(doneCount);
+   // color the object solid black to indicate it is in final position
+   xa.color("nums"+l, Color.black);
+   xa.fill("nums"+l, xa.SOLID);
+   if ((l-1)-left &gt; 0) send(task, new Task(left, l-1));
+   else if ((l-1)-left == 0) {  V(doneCount);
+      // color the object solid black to indicate it is in final position
+      xa.color("nums"+left, Color.black);
+      xa.fill("nums"+left, xa.SOLID);
+   }
+}
+</PRE>
+At the bottom of the animation window is a button and text field
+showing the default values of some of the command line arguments.
+Alter these as needed and click the button.
+<UL>
+  <P>
+   <TT>-n</TT>: number of numbers to sort<BR>
+   <TT>-r</TT>: range of random numbers generated to sort (from 1)<BR>
+   <TT>-p</TT>: number of CPUs (worker threads) available<BR>
+  </P>
+</UL>
+To start the animation, push the ``Start'' button after
+checking the command line arguments text field and clicking that button.
+<APPLET CODE="XtangoApplet.class" WIDTH=500 HEIGHT=600>
+<PARAM NAME="command" VALUE="quickSort -n50 -r10000 -p6">
+An applet appears here if you have a Java-enabled browser.
+</APPLET>
+</P>
+
+<HR>
+
+<P>
+This animation tests all the animation method calls available.
+It creates circles, lines, triangles, rectangles, and text of
+different colors.
+It moves these around the animation frame both smoothly and in jumps,
+individually and concurrently.
+<PRE>
+xa.begin();
+xa.delay(10);
+xa.pointLine("Lthin", 0.3f, 0.2f, 0.8f, 0.7f, Color.black, XtangoApplet.THIN);
+xa.delay(10);
+xa.pointLine("Lmedium", 0.4f, 0.2f, 0.9f, 0.7f, Color.black, XtangoApplet.MEDTHICK);
+xa.delay(10);
+xa.pointLine("Lthick", 0.5f, 0.2f, (float)1, 0.7f, Color.black, XtangoApplet.THICK);
+xa.delay(10);
+xa.triangle("Tri1", 0.1f, 0.1f, 0.5f, 0.9f, 0.9f, 0.2f, Color.magenta, XtangoApplet.OUTLINE);
+xa.delay(10);
+xa.triangle("Tri2", 0.1f, 0.3f, 0.7f, 0.9f, 0.8f, 0.3f, Color.green, XtangoApplet.SOLID);
+xa.delay(10);
+xa.bg(Color.yellow);
+xa.delay(10);
+xa.text("t00", 0.0f, 0.0f, false, Color.gray, "text 0");
+xa.delay(10);
+xa.text("t01", 0.1f, 0.1f, false, Color.blue, "text 1");
+xa.delay(10);
+xa.circle("c0", 0.8f, 0.2f, 0.1f, Color.red, XtangoApplet.SOLID);
+xa.delay(10);
+xa.bg(Color.cyan);
+xa.delay(10);
+xa.text("t02", 0.2f, 0.2f, false, Color.gray, "text 2");
+xa.delay(10);
+xa.text("t03", 0.3f, 0.3f, false, Color.gray, "text 3");
+xa.delay(10);
+xa.text("t04", 0.4f, 0.4f, false, Color.gray, "text 4");
+xa.delay(10);
+xa.text("t05", 0.5f, 0.5f, false, Color.gray, "text 5");
+xa.delay(10);
+xa.text("t06", 0.6f, 0.6f, false, Color.gray, "text 6");
+xa.delay(10);
+xa.text("t06", 0.6f, 0.6f, false, Color.gray, "TEXT 6");
+xa.delay(10);
+xa.text("t07", 0.7f, 0.7f, false, Color.gray, "text 7");
+xa.delay(10);
+xa.text("t08", 0.8f, 0.8f, false, Color.gray, "text 8");
+xa.delay(10);
+xa.text("t09", 0.9f, 0.9f, false, Color.gray, "text 9");
+xa.delay(10);
+xa.text("t10", (float)1, (float)1, false, Color.gray, "text10");
+xa.delay(10);
+xa.circle("c1", 0.7f, 0.7f, 0.05f, Color.black, XtangoApplet.OUTLINE);
+xa.delay(10);
+xa.fill("c1", XtangoApplet.SOLID);
+xa.delay(10);
+xa.fill("c1", XtangoApplet.HALF);
+xa.delay(10);
+xa.color("t07", Color.white);
+xa.delay(10);
+xa.raise("t07");
+xa.delay(10);
+xa.swapIds("t04", "t05");
+xa.jump("t04", 0.9f, 0.1f);
+xa.delay(10);
+xa.delete("t04"); xa.delete("t05"); xa.delete("t06");
+xa.delete("t04");
+xa.delay(10);
+xa.jumpTo("c0", "t03");
+xa.delay(10);
+xa.vis("t03");    // should lower
+xa.delay(10);
+xa.vis("t03");    // should raise
+xa.delay(10);
+xa.rectangle("R", 0.5f, 0.5f, 0.1f, 0.2f, Color.black, XtangoApplet.SOLID);
+xa.delay(10);
+xa.rectangle("Rhalf", 0.6f, 0.6f, 0.2f, 0.1f, Color.black, XtangoApplet.HALF);
+xa.delay(10);
+xa.line("L", 0.1f, 0.1f, 0.8f, 0.8f, Color.black, XtangoApplet.THIN);
+xa.delay(10);
+xa.circle("moveTest1", 0.1f, 0.9f, 0.05f, Color.magenta, XtangoApplet.SOLID);
+xa.move("moveTest1", 0.9f, 0.1f);
+xa.circle("moveTest2", 0.9f, 0.9f, 0.05f, Color.blue, XtangoApplet.OUTLINE);
+xa.move("moveTest2", 0.1f, 0.1f);
+for (int i = 0; i &lt; 5; i++) {
+   xa.rectangle("R"+i, (float)Math.random(), (float)Math.random(),
+      (float)Math.random()/4,
+      (float)Math.random()/4, Color.magenta, XtangoApplet.SOLID);
+   xa.delay(2);
+   xa.color("R"+i, Color.orange);
+   xa.delay(2);
+   xa.delete("R"+i);
+}
+for (int i = 0; i &lt; 5; i++) {
+   xa.delay(2);
+   float x = (float)Math.random();
+   float y = (float)Math.random();
+   System.out.println("jump x=" + x + ", y=" + y);
+   xa.jump("c1", x, y);
+}
+xa.exchangePosAsync("moveTest1", "moveTest2");
+xa.delay(1);
+xa.bigText("ha!", 0.5f, 0.1f, true, Color.black, "ha!");
+xa.exchangePos("moveTest1", "moveTest2");
+xa.delay(1);
+xa.bigText("Ha!", 0.6f, 0.1f, true, Color.black, "Ha!");
+xa.exchangePosAsync("moveTest1", "moveTest2");
+xa.delay(5);
+xa.bigText("HA!", 0.7f, 0.1f, true, Color.black, "HA!");
+xa.delay(10);
+xa.jumpRelative("t00", 0.05f, 0.05f);
+xa.delay(10);
+xa.jumpRelative("t01", -0.05f, 0.07f);
+xa.delay(10);
+xa.jumpRelative("t02", 0.02f, -0.15f);
+xa.delay(10);
+xa.jumpRelative("t03", -0.3f, -0.3f);
+xa.delay(10);
+xa.moveRelative("moveTest1", 0.3f, 0.3f);
+xa.moveTo("moveTest2", "t00");
+xa.delay(10);
+xa.smallText("Tsmall", 0.2f, 0.9f, true, Color.magenta, "Going...");
+xa.line("L1", 0.2f, 0.85f, 0.0f, 0.1f, Color.black, XtangoApplet.THIN);
+xa.line("L2", 0.15f, 0.9f, 0.1f, 0.0f, Color.black, XtangoApplet.THIN);
+xa.delay(10);
+xa.text("Tnormal", 0.15f, 0.8f, true, Color.blue, "Yup, Going...");
+xa.line("L3", 0.15f, 0.75f, 0.0f, 0.1f, Color.black, XtangoApplet.THIN);
+xa.line("L4", 0.1f, 0.8f, 0.1f, 0.0f, Color.black, XtangoApplet.THIN);
+xa.delay(10);
+xa.bigText("Tbig", 0.1f, 0.7f, true, Color.darkGray, "Surely, GONE!");
+xa.line("L5", 0.1f, 0.65f, 0.0f, 0.1f, Color.black, XtangoApplet.THIN);
+xa.line("L6", 0.05f, 0.7f, 0.1f, 0.0f, Color.black, XtangoApplet.THIN);
+xa.delay(10);
+xa.coords(0.0f, 0.0f, 0.5f, 0.5f);
+xa.delay(10);
+xa.coords(0.0f, 0.5f, 0.5f, (float)1);
+xa.delay(10);
+xa.coords(0.0f, 0.0f, (float)1, (float)1);
+xa.delay(10);
+xa.coords(0.0f, 0.0f, (float)1, 0.5f);
+xa.delay(10);
+xa.coords(0.0f, 0.0f, 0.5f, (float)1);
+xa.delay(10);
+xa.switchPos("Tbig", "Tsmall");
+xa.delay(10);
+xa.moveToAsync("Tnormal", "Tsmall");
+xa.delay(1);
+xa.moveRelativeAsync("Tbig", 0.3f, 0.0f);
+xa.moveAsync("Tsmall", 0.2f, 0.9f);
+System.out.println("DONE!");
+xa.end();
+</PRE>
+At the bottom of the animation window is a button and text field.
+First click this button.
+To start the animation, then push the ``Start'' button.
+<APPLET CODE="XtangoApplet.class" WIDTH=500 HEIGHT=600>
+<PARAM NAME="command" VALUE="testing">
+An applet appears here if you have a Java-enabled browser.
+</APPLET>
+</P>
+
+<HR>
+
+<P>Source codes.</P>
+<UL>
+<P><A HREF="XtangoApplet.java"><TT>XtangoApplet.java</TT></A></P>
+<P><A HREF="Animation.java"><TT>Animation.java</TT></A></P>
+<P><A HREF="AnimatedBubbleSort.java"><TT>AnimatedBubbleSort.java</TT></A></P>
+<P><A HREF="AnimatedDiningPhilosophers.java"><TT>AnimatedDiningPhilosophers.java</TT></A></P>
+<P><A HREF="AnimatedDistributedPhilosophers.java"><TT>AnimatedDistributedPhilosophers.java</TT></A></P>
+<P><A HREF="AnimatedQuickSort.java"><TT>AnimatedQuickSort.java</TT></A></P>
+<P><A HREF="source.zip"><TT>zip</TT> file</A> of everything</P>
+<P><A HREF="source.tar.gz"><TT>gzip</TT>-ed <TT>tar</TT> file</A> of everything</P>
+</UL>
+
+<HR>
+
+<P>
+<SCRIPT LANGUAGE="JavaScript">
+<!--hide from non-JavaScript browsers
+   document.write("Last modified on "+document.lastModified);
+ // end hiding -->
+</SCRIPT>
+</P>
+
+<P>
+<EM>&#169 1998 Stephen J. Hartley<EM>
+</P>
+
+</BODY>
+</HTML>

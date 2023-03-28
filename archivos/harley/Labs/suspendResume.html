@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<TITLE>Race Conditions Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>More Race Conditions</H1>
+
+<P>
+This is a modification of Exercise 8
+at the end of Chapter 3 of the text.
+</P>
+
+<P>
+Uncomment the <TT>yield()</TT> calls in
+<A HREF="../Threads/srbb.java">Class 3.19</A>,
+make a call to <TT>ensureTimeSlicing()</TT> in the <TT>main</TT> method
+(instituting timeslicing of 100 milliseconds on Solaris)
+and test it with
+<A HREF="../Semaphores/bbpc.java">Program 3.9</A>.
+No race conditions occur (or rarely);
+the producer and consumer threads do not (or rarely) deadlock.
+Why?
+</P>
+
+<P>
+Now replace the <TT>nap(napping)</TT> statements in the producer and consumer
+<TT>run</TT> methods of
+<A HREF="../Semaphores/bbpc.java">Program 3.9</A>
+with
+<PRE>
+long total = 0; for (int i = 0; i &lt; 100*napping; i++) total += i;
+</PRE>
+(on a slow machine --- use 500 instead of 100 on a fast machine)
+and retest
+<A HREF="../Threads/srbb.java">Class 3.19</A>,
+retaining the <TT>ensureTimeSlicing()</TT>.
+Deadlock now occurs in at least some (if not most) of the runs.
+Why?
+</P>
+
+</BODY>
+</HTML>

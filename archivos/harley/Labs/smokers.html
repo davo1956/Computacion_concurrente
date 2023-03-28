@@ -1,0 +1,93 @@
+<HTML>
+<HEAD>
+<TITLE>Semaphore Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>The Cigarette Smokers Problem</H1>
+
+<P>
+Another famous thread synchronization problem in computer science
+is the <I>cigarette smokers problem</I>.
+Unfortunately, the thematic vehicle of this example is currently out of favor.
+Consider a simulation with three <I>smoker</I> threads and one <I>agent</I> 
+thread.
+Each smoker continuously makes a cigarette and smokes it.
+But to make a cigarette, a smoker needs three ingredients:
+tobacco, paper, and matches.
+One of the smoker threads has only paper,
+another has only tobacco, and the third has only matches.
+The agent thread has an infinite supply of all three materials.
+The three smoker threads are initially blocked.
+The agent places two randomly chosen (different) ingredients on the table and
+signals (unblocks) the one smoker who has the remaining ingredient.
+The agent then blocks.
+The signaled smoker removes the two ingredients
+from the table, makes a cigarette, and smokes
+it for a random amount of time, signaling (unblocking) the agent on completion
+of smoking the cigarette.
+The agent then puts out another random two of the three ingredients,
+and the cycle repeats.
+</P>
+
+<P>
+Write a multi-class multithreaded Java program
+that uses semaphores
+(classes <TT>BinarySemaphore</TT> and/or <TT>CountingSemaphore</TT>)
+to synchronize the agent thread and
+the three smoker threads.
+<B>No busy waiting is allowed!</B>
+The agent thread executes in an agent object created from an agent class.
+Each smoker thread executes in a smoker object.
+All smoker objects are created from one smoker class
+whose constructor is used to specify the ingredient possessed
+by the smoker object.
+A driver class with a <TT>main</TT> method constructs the objects and
+starts the threads.
+</P>
+
+<H2>Input Data</H2>
+
+<P>
+The input data to your Java program are
+(a) the amount of time in seconds that the simulation runs, and
+(b) the maximum time in seconds that a smoker smokes after rolling a cigarette.
+The maximum smoke time is used in the random number generator as follows.
+<PRE>
+int smoking = 1 + (int) random(1000*maxSmoke);
+nap(smoking);
+</PRE>
+Place these two numbers on the command line for your program to parse.
+You <B>must</B> parse these numbers from the command line
+with the <TT>GetOpt</TT> class
+(<A HREF="../lib/Utilities/GetOpt.java">Library Class 2.1</A>).
+The command line has the form
+<OL>
+<TT>% java Smoking -s </TT><I>maxSmoke</I><TT> -R </TT><I>runTime</I>
+</OL>
+Remember to give the corresponding variables default values in your
+program to handle missing command line options.
+</P>
+
+<H2>Deadlock</H2>
+
+<P>
+Be careful about deadlock.
+It might happen like this.
+Suppose the agent places paper and matches on the table.
+The one smoker with a pouch of tobacco can now smoke if it grabs the
+paper and matches off the table.
+But what if the smoker with a book of matches grabs the paper and waits
+for the agent to put out the tobacco?
+All threads are now blocked forever!
+Don't let this happen in your program.
+</P>
+
+<P>
+Animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

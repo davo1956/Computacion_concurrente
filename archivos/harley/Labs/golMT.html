@@ -1,0 +1,57 @@
+<HTML>
+<HEAD>
+<TITLE>Multithreaded Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Game of Life Simulation Using Multiple Threads</H1>
+
+<P>
+Write a multi-class multi-threaded Java program
+that simulates the <EM>game of life</EM>.
+Each cell will have its own thread dedicated to it
+to compute the cell's value in the next generation.
+This thread will be embedded in a class that is instantiated
+M*N times by the driver, once for each cell in the grid.
+Thread synchronization will be done with semaphores.
+</P>
+
+<P>
+The primary problem you have to solve is coordinating all the cell
+threads during each generation.
+A cell thread cannot start computing the new cell value for the
+next generation until all other cells have
+completed their computation for the current generation.
+Use Java semaphores, that is <TT>P(S)</TT>
+and <TT>V(S)</TT> to solve this problem.
+</P>
+
+<P>
+Have a look at a
+<A HREF="../lib/Synchronization/Barrier.java">
+<I>barrier</I></A>.
+You will find it extremely useful!
+Here is an
+<A HREF="../Parallel/grba.java">example</A>
+program using a barrier.
+</P>
+
+<P>
+For those needing help with creating a thread for each cell in the grid,
+have a look at <A HREF="golWRONG.java">this</A> <B>incorrect</B> solution.
+Make sure you see why it is wrong.
+</P>
+
+<P>
+Neither <TT>nap()</TT> nor <TT>sleep()</TT> is allowed.
+</P>
+
+<P>
+If you have not already done so for game-of-life,
+animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

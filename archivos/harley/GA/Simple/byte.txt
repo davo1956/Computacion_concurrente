@@ -1,0 +1,37 @@
+The GA parameters are:
+  populationSize      = 100
+  numXoverPoints      = 1
+  crossoverRate       = 0.7
+  mutationRate        = 0.01
+  doElitism           = true
+  printPerGens        = 100
+  maxGenerations      = 1000
+  Debug.flag          = false
+  logFileName         = byte.txt
+ByteCountChromosome: chromosome length is 64
+GA: chromosome length = 64
+GA: mainLoop
+Known solution fitness is 64.0
+Initial population: generation=0 best value=8.0 avg=0.08 stddev=0.8
+most fit (previous generation=0):
+   1101011001101111001111100101001000011000111011011111111110001100
+   this chromosome has 1 bytes set
+    fitness= 8.0
+number of crossovers and mutations: 0 and 0
+Report: generation=100 best value=40.0 avg=25.68 stddev=7.567714518287736
+most fit (previous generation=71):
+   1111111111111111111111111101000000100100111111111111111100000110
+   this chromosome has 5 bytes set
+    fitness= 40.0
+number of crossovers and mutations: 3480 and 6427
+Report: generation=200 best value=48.0 avg=31.36 stddev=7.252335047166779
+most fit (previous generation=196):
+   1111111111111111111111111101011111001111111111111111111111111111
+   this chromosome has 6 bytes set
+    fitness= 48.0
+number of crossovers and mutations: 6959 and 12696
+Simulation completed in 227 generations and 30.601 seconds
+Best member (generation=227):
+   1111111111111111111111111111111111111111111111111111111111111111
+   this chromosome has 8 bytes set
+    fitness= 64.0

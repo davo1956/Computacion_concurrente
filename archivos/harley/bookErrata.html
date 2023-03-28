@@ -1,0 +1,86 @@
+<HTML>
+<HEAD>
+<TITLE>Book Errata</TITLE>
+<LINK REV="OWNER" HREF="mailto:shartley@mcs.drexel.edu">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" ALINK="#FF0000" VLINK="#000080">
+
+<H1>Book Errata</H1>
+
+<P>
+<SCRIPT LANGUAGE="JavaScript">
+<!--hide from non-JavaScript browsers
+   document.write("Last modified on "+document.lastModified);
+ // end hiding -->
+</SCRIPT>
+</P>
+
+<P>
+<DL>
+<DT> Page 33, bottom.
+<DD> Each time a one-point crossover operation is performed,
+     the crossover point is chosen randomly.
+<DT> Page 54.
+<DD> ``If a thread in the running state calls its <TT>yield</TT> method,
+     it gives up the CPU and is put back in the runnable set
+     in the runnable state.''
+     Even if several threads are runnable,
+     there is no guarantee that the next thread to run on the CPU is
+     not the one that just yielded.
+<DT> Page 55.
+<DD> ``The Java thread scheduler ensures that the highest priority
+     runnable thread (or one of them if there are several)
+     is running on the CPU.''
+     This is not accurate.
+     According to page 415 of <I>The Java Language Specification</I> [21],
+     the scheduler usually ensures this, but it is not guaranteed that the
+     highest priority thread is always executing on the CPU.
+<DT> Page 57.
+<DD> Thus Library Class 3.2 (<TT>Scheduler</TT>)
+     does not guarantee time slicing, but it works in practice.
+<DT> Page 106, 121.
+<DD> The commands to induce starvation should be (change <TT>-n5</TT> to
+     <TT>-p5</TT>)
+     <PRE>
+     javac dphi.java dpdr.java
+     java DiningPhilosophers -p5 -R300 1 100 10 1 1 100 100 1 100 1
+     </PRE>
+<DT> Page 135.
+<DD> If several threads are blocked, waiting to acquire the lock on
+     an object that is currently held by some other thread,
+     there is no guarantee that the thread waiting the longest will be
+     the next one to acquire the lock when it is released.
+<DT> Page 137.
+<DD> A <TT>notify()</TT> removes an arbitrary thread from the wait set,
+     if there is one.  The thread must reacquire the monitor lock and therefore
+     competes with all other threads trying to acquire the monitor lock,
+     having called a <TT>synchronized</TT> method, or reacquire the monitor
+     lock, having been notified.  Thus the notified thread is not necessarily
+     in the runnable (ready) set, but might still be blocked.
+<DT> Page 393.
+<DD> The interrupt/notify race condition is still present.  Suppose several
+     threads are blocked in <TT>wait()</TT> inside <TT>P()</TT>.  Next, suppose
+     one is notified by a thread calling <TT>V()</TT>.  The notified thread
+     is removed from the wait set and now needs to reacquire the monitor lock
+     in order to continue execution in the monitor.  Now suppose the notified
+     thread is interrupted before reacquiring the monitor lock.  An
+     <TT>InterruptedException</TT> exception is thrown and the thread executes
+     its <TT>catch</TT> block when it reacquired the monitor lock.  However,
+     <TT>value</TT> is less than zero, so the thread does another <TT>wait</TT>
+     and the notify is lost.
+<DT> Page 399.
+<DD> A similar problem to page 393.
+</DL>
+</P>
+
+<HR>
+
+<P>
+<ADDRESS><A HREF="http://www.mcs.drexel.edu/~shartley">SJH</A></ADDRESS>
+<ADDRESS>
+<A HREF="mailto:shartley@mcs.drexel.edu">shartley@mcs.drexel.edu</A>
+</ADDRESS>
+</P>
+</BODY>
+</HTML>

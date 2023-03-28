@@ -1,0 +1,149 @@
+<HTML>
+<HEAD>
+<TITLE>Conditional Rendezvous Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>The Elevator Problem --- Again!</H1>
+
+<P>
+Your assignment is to write a multi-class multithreaded Java program
+that simulates the movement of the people in the building and their use
+of the elevator.
+In addition to the people and elevator classes, there is a
+<TT>ControlPanel</TT> class from which is instantiated
+a control panel object containing a control panel thread.
+Use <I>conditional rendezvous</I> to synchronize the elevator thread,
+the control panel thread, and the people threads.
+See the following library classes and example programs.
+<UL>
+<LI><A HREF="../lib/Synchronization/RendezvousCondition.java">Library Class 6.19: Rendezvous Condition.</A>
+<LI><A HREF="../lib/Synchronization/ConditionalRendezvous.java">Library Class 6.20: Conditional Rendezvous.</A>
+<LI><A HREF="../Rendezvous/dpre.java">Program 6.10: Dining Philosophers Using Conditional Rendezvous.</A>
+<LI><A HREF="../Rendezvous/bnkr.java">Program 6.11: Bank Deposits and Withdrawals.</A>
+</UL>
+No semaphores are allowed, the keyword <TT>synchronized</TT> cannot be
+used, and no busy waiting is allowed.
+</P>
+
+<P>
+The program operates in two modes, a random mode and a deterministic mode.
+The way the elevator operates is as before.
+One place to start is with the distributed dining philosophers,
+<A HREF="../Messaging/ddph.java">Program 6.6</A>.
+This program uses conditional message passing, however.
+</P>
+
+<P>
+Your program will have an elevator class from which an elevator object
+containing the elevator thread is instantiated,
+a control panel class from which a control panel object
+containing the control panel thread is instantiated,
+and a person class from which person objects containing a person thread each
+are instantiated.
+<PRE>
+class CallButton ... {...}
+
+class ToButton ... {...}
+
+class ElevatorRequest ... {...}
+
+class Person ... {
+   ...
+   ConditionalRendezvous cr = ... // shared with all other threads
+   public void run() {  // a person thread
+      ...
+      while (true) {
+         int wander = 1 + (int) random(1000*maxWander);
+         nap(wander);
+         int toFloor = (int) random(...);
+         cr.clientTransactServer(new CallButton(id, onFloor));
+         cr.clientTransactServer(new ToButton(id, onFloor, toFloor));
+      }
+   }
+}
+
+class Elevator ... {
+   ...
+   ConditionalRendezvous cr = ... // shared with all other threads
+   public void run() {  // the elevator thread
+      ...
+      while (true) {
+         ...
+         cr.clientTransactServer(new ElevatorRequest(...));
+         ...
+      }
+   }
+}
+
+class ControlPanel ... {
+   Rendezvous[][] controlPanel = new Rendezvous[Npeople][Nfloors];
+   ...
+   ConditionalRendezvous cr = ... // shared with all other threads
+   public void run() {  // the control panel thread
+      ...
+      while (true) {
+         ...
+         Rendezvous r = cr.serverGetClient(new ControlPanelCondition(...));
+         Object request = r.serverGetRequest();
+         if (request instanceof ElevatorRequest) {
+            ...
+         } else if (request instanceof CallButton {
+            int floor = ((CallButton) request).getFloor();
+            int id = ((CallButton) request).getID();
+            controlPanel[id][floor] = r;  // save for a later reply
+            ...
+         }
+         ...
+         r.serverMakeReply(...);
+         ...
+      }
+   }
+}
+</PRE>
+</P>
+
+<H2>Input Data</H2>
+
+<P>
+Everybody must include the following two deterministic examples in their
+submitted sample runs.
+<PRE>
+% java Elevator -p 1 -f 11 -R 40 -D
+3 2 5 11 5 1 5
+% java Elevator -p 5 -f 11 -R 360 -D
+10  2  1 11  1  1  5  2  1  3  1  4  1  5  1  6  1  7  1  1 99
+10  4  1 11  2  1  5  3  1  4  1  5  1  6  1  7  1  8  1  1 99
+10  6  1 11  3  1  5  4  1  5  1  6  1  7  1  8  1  9  1  1 99
+10  8  1 11  4  1  5  5  1  6  1  7  1  8  1  9  1 10  1  1 99
+10 10  1 11  5  1  5  6  1  7  1  8  1  9  1 10  1 11  1  1 99
+</PRE>
+</P>
+
+<P>
+Be sure to (stress) test your program with the following kinds of input data.
+<UL>
+<LI> One person in the building who wanders (naps) for a long time on each
+     floor (so the elevator goes into its idle state).
+<LI> Many people wandering for short periods of time, keeping the elevator
+     busy.
+</UL>
+</P>
+
+<H2>For Extra Credit</H2>
+
+<P>
+The building has <I>N<sub>elevators</sub></I> elevators.
+Each floor has a single call button shared by all the elevators.
+When an elevator stops on a floor, it picks up all people waiting
+on that floor.
+</P>
+
+<P>
+Animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

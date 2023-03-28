@@ -1,0 +1,221 @@
+<HTML>
+<HEAD>
+<TITLE>Semaphore Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>The Elevator Problem</H1>
+
+<P>
+In a medium-sized city somewhere in Pennsylvania stands a building with
+<I>N<sub>floors</sub></I> floors, numbered from one on up, and an elevator.
+The <I>N<sub>people</sub></I> people who work in the building
+use the elevator to move from one floor to another.
+At exactly 8 o'clock every weekday morning, these people enter the building
+and take the elevator to the floors they work on.
+The elevator is waiting with open doors at 8 o'clock and is big enough
+to hold all <I>N<sub>people</sub></I> at once.
+From 8 o'clock in the morning until 5 o'clock in the afternoon,
+the people wander around the building,
+using the elevator to move from floor to floor as needed.
+</P>
+
+<P>
+Your assignment is to write a multi-class multithreaded Java program
+that simulates the movement of the people in the building and their use
+of the elevator.
+Use semaphores to synchronize the elevator thread and the people
+threads.
+</P>
+
+<P>
+The program operates in two modes, a random mode and a deterministic mode.
+In the random mode, a command line argument is used to compute random
+floor wandering times of the people.
+<PRE>
+int wander = 1 + (int) random(1000*maxWander);
+nap(wander);
+</PRE>
+After wandering around on a particular floor,
+each person generates a different random floor number and then uses the elevator
+to go to that floor and wander around for another random amount of time.
+</P>
+
+<P>
+In the deterministic mode,
+each person operates according to an input script,
+which determines which floor the person goes to and how long the
+person wanders around on that floor before using the elevator to go
+to another floor.
+</P>
+
+<P>
+When a person wants to use the elevator to go to another floor,
+the person pushes the elevator call button,
+waits for the elevator to arrive and open its doors,
+enters the elevator, pushes the button of the destination floor,
+and waits for the elevator to arrive at that floor.
+Because this is an old building, each floor has just a single button
+to call the elevator, not separate ``up'' and ``down'' buttons
+we are more accustomed to seeing.
+</P>
+
+<P>
+The elevator continually goes up and down,
+picking up and dropping off passengers.
+After unloading, the elevator waits where it is if there are no waiting
+passengers on other floors;
+if there are people waiting, the elevator picks them up.
+</P>
+
+<P>
+What algorithm does the elevator use when on floor <I>f</I> and
+there are people waiting on floors <I>x</I>, <I>y</I>, ..., and <I>z</I>?
+The elevator does not use ``nearest floor next'' because that could leave
+people on the upper or lower floors waiting longer than is fair.
+Instead,
+the elevator goes up until it reaches the highest floor needed to pick up
+or drop off a passenger and then goes down to the lowest floor needed to
+pick up or drop off a passenger.
+While going up and down like this,
+the elevator picks up and drops off passengers along the way.
+The important feature of the elevator algorithm is that the elevator does
+not reverse direction until it has gone as far in one direction as
+needed to pick up and/or drop off passengers.
+This should sound familiar to those acquainted with disk arm
+scheduling algorithms.
+</P>
+
+<P>
+The elevator takes one second to move from a floor to the next higher or
+lower floor.
+If the elevator needs to stop at a particular floor to pick up or
+discharge passengers, it takes at least one second to do so.
+After a person disembarks, that person cannot board the elevator again
+until the elevator leaves and returns to that person's floor
+<B>unless</B> the elevator is idle (no call buttons pushed and no
+floor buttons pushed) right after that person disembarks.
+</P>
+
+<P>
+Your program will have an elevator class from which an elevator object
+containing the elevator thread is instantiated,
+and a person class from which person objects containing a person thread each
+are instantiated.
+In either the elevator class or another coordinator class,
+place all the semaphores and other state variables as private data fields.
+The <TT>main</TT> method in a driver class starts everything going.
+A person object calls a method in the elevator object to indicate the
+person is waiting on a floor to be picked up.
+The person thread blocks on a semaphore inside the method until picked
+up by the elevator.
+When picked up, the person object calls another method to indicate the
+desired destination floor.
+The person thread blocks on a semaphore inside the method until the
+elevator arrives at the floor.
+When arriving at a floor, the elevator thread naps for one second to let
+passengers get on and off, then the elevator thread blocks until
+all passengers have safely (dis)embarked.
+<PRE>
+class Person ... {
+   ...
+   public void run() {  // person thread
+      ...
+      while (true) {
+         int wander = 1 + (int) random(1000*maxWander);
+         nap(wander);
+         int toFloor = (int) random(...);
+         elevator.callButton(onFloor);
+         elevator.toButton(toFloor);
+      }
+   }
+}
+</PRE>
+</P>
+
+<P>
+How to get started on your design of this mess?
+The <A HREF="../Semaphores/slba.java">sleeping barber</A>
+program is an excellent one on which to base your design.
+Note the similarities: customers interact with the barber for service,
+passengers interact with the elevator for service.
+</P>
+
+<H2>Input Data</H2>
+
+<P>
+The input data to your Java program are the number of people in the
+building, the maximum person building wander time (napping time),
+the number of floors in the building,
+the simulation running time, and a flag for deterministic mode.
+Place these numbers on the command line for your program to parse.
+You <B>must</B> parse these numbers from the command line
+with the <TT>GetOpt</TT> class
+(<A HREF="../lib/Utilities/GetOpt.java">Library Class 2.1</A>).
+The command line has the form
+<OL>
+<TT>% java Elevator -p </TT><I>N<sub>people</sub></I><TT> -w </TT><I>maxWander</I><TT> -f </TT><I>N<sub>floors</sub></I><TT> -R </TT><I>runTime</I><TT> -D </TT>
+</OL>
+Remember to give the corresponding variables default values in your
+program to handle missing command line options.
+</P>
+
+<P>
+If the <TT>-D</TT> command line argument is present,
+the program operates in deterministic mode.
+In this mode,
+the program reads from the keyboard
+information for the people to control their activities
+(to read from a file, input can be redirected in this way:
+<TT>java</TT> <TT>Program</TT>
+<I>command line arguments</I> <TT>&lt;</TT><I>file</I>).
+See <A HREF="../Sequential/tokn.java">
+``Program/Class 2.5: Reading Keyboard Input''</A>
+for an example of how to read multiple numbers per line.
+For each person, one or more lines of the form
+<PRE>
+<I>n</I> <I>f<sub>1</sub></I> <I>t<sub>1</sub></I> <I>f<sub>2</sub></I> <I>t<sub>2</sub></I> <I>f<sub>3</sub></I> <I>t<sub>3</sub></I> ... <I>f<sub>n</sub></I> <I>t<sub>n</sub></I>
+</PRE>
+are present.
+Here, <TT><I>n</I></TT> is the number of elevator ride/floor wandering pairs
+for the person and the pair
+<TT><I>f<sub>i</sub></I></TT> <TT><I>t<sub>i</sub></I></TT>
+means the person takes the elevator to floor <TT><I>f<sub>i</sub></I></TT>
+and wanders around on that floor for exactly
+<TT><I>t<sub>i</sub></I></TT> seconds before using the elevator to go to
+another floor.
+</P>
+
+<P>
+<B>Everybody</B> must include the following two deterministic examples in their
+submitted sample runs.
+<PRE>
+% java Elevator -p 1 -f 11 -R 40 -D
+3 2 5 11 5 1 5
+% java Elevator -p 5 -f 11 -R 360 -D
+10  2  1 11  1  1  5  2  1  3  1  4  1  5  1  6  1  7  1  1 99
+10  4  1 11  2  1  5  3  1  4  1  5  1  6  1  7  1  8  1  1 99
+10  6  1 11  3  1  5  4  1  5  1  6  1  7  1  8  1  9  1  1 99
+10  8  1 11  4  1  5  5  1  6  1  7  1  8  1  9  1 10  1  1 99
+10 10  1 11  5  1  5  6  1  7  1  8  1  9  1 10  1 11  1  1 99
+</PRE>
+</P>
+
+<P>
+Be sure to (stress) test your program with the following kinds of input data.
+<UL>
+<LI> One person in the building who wanders (naps) for a long time on each
+     floor (so the elevator goes into its idle state).
+<LI> Many people wandering for short periods of time, keeping the elevator
+     busy.
+</UL>
+</P>
+
+<P>
+Animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

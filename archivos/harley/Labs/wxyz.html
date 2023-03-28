@@ -1,0 +1,84 @@
+<HTML>
+<HEAD>
+<TITLE>Semaphore Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Printing W, X, Y, and Z</H1>
+
+<P>
+<A HREF="../Semaphores/ABCs.java">Program 4.3</A>
+uses semaphores to synchronize three threads
+so they print out the letters `A', `B', and `C' according to certain rules.
+Your task in this programming assignment is to synchronize four threads
+so they print out the letters `W', `X', `Y', and `Z'
+according to the following rules.
+<OL>
+<LI> The total number of `W's and `X's that have been output at any point
+     in the output string cannot exceed the total number of `Y's and `Z's
+     that have been output at that point.
+<LI> The total number of `W's that have been output at any point in the
+     output string cannot exceed twice the number of `X's that have been
+     output at that point.
+<LI> After a `Y' has been output, another `Y' cannot be output until one
+     or more `Z's have been output.
+</OL>
+</P>
+
+<P>
+Use binary and counting semaphores for synchronization,
+as appropriate.
+</P>
+
+<H2>Input Data</H2>
+
+<P>
+The input data consists of five integer (<TT>int</TT>) numbers:
+<I>w</I>, <I>x</I>, <I>y</I>, <I>z</I>, and <I>runtime</I>.
+You <B>must</B> parse these five numbers from the command line
+using the <TT>GetOpt</TT> class
+(<A HREF="../lib/Utilities/GetOpt.java">Library Class 2.1</A>).
+The command line has the form
+<OL>
+<TT>% java WXYZs -w </TT><I>w</I><TT> -x </TT><I>x</I><TT> -y </TT><I>y</I><TT> -z </TT><I>z</I><TT> -R </TT><I>runtime</I>
+</OL>
+Remember to give the corresponding variables default values in your
+program to handle missing command line options.
+</P>
+
+<P>
+The numbers <I>w</I>, <I>x</I>, <I>y</I>, and <I>z</I>
+control the napping time of the four threads printing the corresponding
+letter, as follows.
+<PRE>
+class Pw extends ... implements Runnable {
+   public void run () {
+      while (true) {
+         int napping = 1+(int)random(1000*w); // w is in seconds
+         nap(napping);
+
+         ...    // synchronization to follow the rules
+
+         System.out.print("W"); System.out.flush();
+
+         ...    // synchronization to follow the rules
+      }
+   }
+}
+</PRE>
+Before each time a thread prints a letter (according to the rules),
+it naps for a random number of milliseconds generated from
+its command line argument (in seconds) or its default value.
+The number <I>runtime</I> controls how long the whole program runs,
+i.e., there is a <TT>nap(1000*runtime)</TT> in the <TT>main</TT>
+method.
+</P>
+
+<P>
+Animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

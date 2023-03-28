@@ -1,0 +1,80 @@
+<HTML>
+<HEAD>
+<TITLE>Monitor Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Starvation-Free Monitor for the Unisex Bathroom</H1>
+
+<P>
+This is Exercise 5.3 of the text.
+</P>
+
+<P>
+As in all our programming assignments, use command line arguments
+to set the simulation parameters, such as the number of males, females,
+baboons of each type, maximum nap time outside the bathroom,
+maximum nap time inside the bathroom, etc.
+</P>
+
+<P>
+Remember that Java monitors are `signal and continue' so be sure
+to think about the ramifications of this as you design your monitor,
+in particular ``barging''.
+No semaphores and no busy waiting allowed.
+Do not use <TT>nap()</TT> within a synchronized monitor method.
+Do you see why?
+Only three <TT>nap()</TT>'s are allowed in this program:
+people (baboons) wandering around, people (baboons) using the bathroom
+(crossing the canyon on the rope),
+and one in <TT>main()</TT> to shut down the simulation.
+</P>
+
+<P>
+For the purposes of this assignment you may assume that each <TT>notify()</TT>
+awakens the thread that has been waiting the longest.
+But it is unpredictable when that thread will get back into the monitor.
+It is possible for other threads that have called a monitor synchronized
+method to ``barge'' in ahead of it.
+Also, <TT>notifyAll()</TT> awakens all the waiting threads and it is
+unpredictable which thread will get back into the monitor first
+and whether another thread will ``barge'' in ahead of it.
+</P>
+
+<P>
+Describe which of the two approaches to starvation
+prevention that we discussed in class you picked to implement:
+strict serialization or platooning (batching).
+</P>
+
+<P>
+Here is one way to approach a monitor programming assignment.
+Think of the monitor as maintaining the state of the system
+in integer and boolean data fields and the synchronized methods
+as making atomic changes to the state of the system.
+For example, a call to <TT>maleEnterBathroom()</TT> would check to see
+who is currently using the bathroom.
+If nobody, then allow the male to enter the bathroom.
+If males, then allow the male to enter the bathroom
+unless there is a female waiting, in which case
+<TT>wait()</TT> until the next batch of males is allowed in.
+If females are currently using the bathroom,
+then <TT>wait()</TT> until the bathroom is free or until
+the next batch of males is allowed in.
+The last person to leave the bathroom will check to see
+if there are any people of the other gender waiting to use the bathroom
+and if so, set a boolean variable <TT>femaleTurn</TT> or <TT>maleTurn</TT>,
+as appropriate, and do a <TT>notifyAll()</TT>.
+</P>
+
+<P>
+If you have not done so already,
+animate your program using
+<A HREF="../lib/XtangoAnimation/XtangoAnimator.java">
+<TT>XtangoAnimator.java</TT></A>.
+First do the base assignment as specified above and turn it in.
+Then do an animation of it as a separate program.
+</P>
+
+</BODY>
+</HTML>

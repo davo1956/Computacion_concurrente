@@ -1,0 +1,45 @@
+<HTML>
+<HEAD>
+<TITLE>Semaphore Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Baboons Crossing a Canyon aka Unisex Bathroom</H1>
+
+<P>
+This is Exercise 4.7 of the text.
+Do not worry (yet) about starvation, that is, only do the first part.
+A big hint:
+modify the readers and writers database program so that multiple
+writers can write concurrently as long as no readers are reading
+the database, i.e., make writers act like readers.
+</P>
+
+<P>
+As in all our programming assignments, use command line arguments
+to set the simulation parameters, such as the number of males, females,
+baboons of each type, maximum nap time outside the bathroom,
+maximum nap time inside the bathroom, etc.
+</P>
+
+<P>
+To find the cause of deadlock,
+remember that a thread blocks when doing a <TT>P()</TT>
+on a semaphore with zero value.
+To find where each thread is blocked in the deadlock,
+put a <TT>System.out.println()</TT> before each <TT>P()</TT>
+and a <TT>System.out.println()</TT> after each <TT>P()</TT>
+so you can see how far each thread is getting before blocking
+and see if it is getting past a <TT>P()</TT>.
+</P>
+
+<P>
+Animate your program using
+<A HREF="../lib/XtangoAnimation/XtangoAnimator.java">
+<TT>XtangoAnimator.java</TT></A>.
+First do the base assignment as specified above and turn it in.
+Then do an animation of it as a separate program.
+</P>
+
+</BODY>
+</HTML>

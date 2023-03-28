@@ -1,0 +1,104 @@
+<HTML>
+<HEAD>
+<TITLE>Sequential Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Game of Life Simulation</H1>
+
+<P>
+This is Exercise 2.4 the text.
+Write a multi-class sequential Java program
+that simulates the <I>game of life</I>.
+The simulation occurs on an M-by-N rectangular array of cells.
+Each cell has only two values: 0 and 1.
+Each cell has eight neighbors: up, down, left, right, and four diagonally.
+Cells on the four edges of the grid have fewer than eight neighbors, of course.
+If the grid is declared as
+<PRE>
+   int[][] grid = new int[N][N];
+</PRE>
+then the neighbors of an interior cell <TT>grid[i][j]</TT> are
+<PRE>
+   grid[i-1][j], grid[i+1][j], grid[i][j-1], grid[i][j+1],
+   grid[i-1][j-1], grid[i-1][j+1], grid[i+1][j-1], grid[i+1][j+1]
+</PRE>
+</P>
+
+<P>
+The game works like this.
+Fill the grid with the initial values.
+Then for each cell in the grid, compute the new value that the cell
+becomes in the next generation of the game.
+All changes occur simultaneously, called a generation.
+<UL>
+<LI>   A 1 cell value stays 1 if exactly two or three neighbors are 1 valued.
+<LI>   A 1 cell value goes to 0 if less than two or greater than three neighbors
+      are 1 valued.
+<LI>   A 0 cell value goes to 1 if exactly three neighbors are 1 valued.
+<LI>   A 0 cell value stays 0 if less than three or greater than three neighbors
+      are 1 valued.
+</UL>
+</P>
+
+<H2>Input Data</H2>
+
+<P>
+The input data to your Java program is
+<UL>
+<LI>   M and N, the size of the rectangular grid;
+<LI>   <TT>maxGenerations</TT>, the number of generations to simulate;
+<LI>   the initial values of the cells, which can be user-specified or random.
+</UL>
+If the only input data is <TT>maxGenerations</TT>,
+then initialize the grid to random values (0 or 1).
+You may read input data from the keyboard or the command line,
+whichever you find more convenient.
+Remember to check for illegal input values, like negative numbers
+or cell initial values that are not 0 or 1.
+</P>
+
+<P>
+Here are some sample input data sets to try.
+This initial population dies out.
+<PRE>
+0 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 1 0
+0 0 0 0 0
+</PRE>
+This initial population dies more slowly.
+<PRE>
+0 0 0 0 0
+0 1 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 0 0
+</PRE>
+This initial population reaches a stable state.
+<PRE>
+0 0 0 0 0
+0 1 1 0 0
+0 1 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+</PRE>
+This initial population oscillates.
+<PRE>
+0 0 0 0 0
+0 0 1 0 0
+0 0 1 0 0
+0 0 1 0 0
+0 0 0 0 0
+</PRE>
+</P>
+
+<P>
+Animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

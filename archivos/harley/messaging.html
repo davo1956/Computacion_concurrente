@@ -1,0 +1,631 @@
+<HTML>
+<HEAD>
+<TITLE>Concurrent Programming Using the Java Language</TITLE>
+<LINK REV="OWNER" HREF="mailto:shartley@mcs.drexel.edu">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" ALINK="#FF0000" VLINK="#000080">
+
+<A NAME="MESSA"><H2>Message Passing</H2>
+
+<P>
+Sometimes the phrase ``send a message to an object'' is used to
+describe a thread in one object calling a method in another object.
+Here, that phrase is used to describe a thread in one object
+sending a message to a thread in another object, where the message
+is itself an object.
+</P>
+
+<P>
+This technique is used for thread communication and synchronization
+in a computing environment where the threads do not have shared memory
+(since the threads reside in different virtual or physical machines).
+Hence the threads cannot share semaphores or monitors and cannot
+use shared variables to communicate.
+Message passing can still be used, of course, in a shared memory platform.
+</P>
+
+<P>
+Messages are sent through a port or channel with an operation like
+<I>send(channel, message)</I> and received from a port or channel
+with an operation like <I>receive(channel, message)</I>.
+Messages can be passed <I>synchronously</I>, meaning the sender
+blocks until the received does a receive and the receiver blocks
+until the sender does a send.
+Since the sender and receiver are at specific known points in their
+code at a known specific instant of time, synchronous message passing
+is also called a <I>simple rendezvous</I> with a one-way flow of
+information from the sender to the receiver.
+</P>
+
+<P>
+In <I>asynchronous</I> message passing, the sender does not block.
+If there is not a receiver waiting to receive the message, the message
+is queued or buffered.
+The receiver still blocks if there is no queued or buffered message
+when a receive is executed.
+</P>
+
+<P>
+In <I>conditional</I> message passing, the message remains queued until
+some condition, specified by the receiver, becomes true.
+At that time, the message is passed to the receiver, unblocking it.
+</P>
+
+<P>
+A two-way flow of information, perhaps over the network, is called
+an <I>extended rendezvous</I> and can be implemented with a pair
+of sends and receives.
+Typically a <I>client</I> thread uses this technique to communicate with
+a <I>server</I> thread and request a service to be performed on its behalf.
+A similar situation is a <I>worker</I> thread contacting a <I>master</I>
+thread, asking for more work to do.
+<P>
+<OL>
+    client or worker: send request; receive reply
+<P>
+    server or master: receive request; perform service; send reply
+</OL>
+</P>
+
+<P>
+Messages are objects and can be
+<P>
+<OL>
+    passed by reference within the same Java Virtual Machine,
+<P>
+    or serialized through a pipe within the same JVM,
+<P>
+    or serialized through a socket between JVMs that are on the
+    same physical machine or on different physical machines.
+</OL>
+</P>
+
+<P>
+The base data types, <TT>int</TT>, <TT>double</TT>, etc.,
+can be sent as messages in binary or raw data format
+through a pipe or socket using the <TT>DataInputStream</TT>
+and <TT>DataOutputStream</TT> methods.
+They can also be sent as objects using the wrapper classes
+<TT>Integer</TT>, <TT>Double</TT>, etc.
+</P>
+
+<A NAME="MESSC"><H3><TT>Synchronization</TT> Package Classes</H3>
+
+<P>
+Here is a collection of Java message passing classes.
+All of the message passing channel classes
+implement the methods in the
+<A HREF="lib/Synchronization/MessagePassing.java">
+<TT>MessagePassing</TT></A>
+interface or the
+<A HREF="lib/Synchronization/ConditionalMessagePassing.java">
+<TT>ConditionalMessagePassing</TT></A>
+interface.
+This
+<A HREF="lib/Synchronization/MessagePassingException.java">
+exception</A> is thrown when an error occurs.
+This
+<A HREF="lib/Synchronization/NotImplementedMethodException.java">
+exception</A> is used in implementing restricted rights channels (below).
+All classes except the conditional ones extend this
+<A HREF="lib/Synchronization/MessagePassingRoot.java">
+base class</A>.
+<P>
+<OL>
+<A HREF="lib/Synchronization/SyncMessagePassing.java">
+Synchronous Channel.</A>
+<P>
+<A HREF="lib/Synchronization/AsyncMessagePassing.java">
+Asynchronous Channel.</A>
+A <TT>Vector</TT> is used to queue sent but not yet received messages.
+<P>
+<A HREF="lib/Synchronization/AsyncConditionalMessagePassing.java">
+Asynchronous Conditional Channel.</A>
+The receiver must pass an object that implements the
+<A HREF="lib/Synchronization/Condition.java">
+<TT>Condition</TT></A> interface, that is the object must
+contain a <TT>checkCondition()</TT> method
+that is used to determine which messages sent are eligible to be
+received.
+<P>
+<A HREF="lib/Synchronization/SyncConditionalMessagePassing.java">
+Synchronous Conditional Channel.</A>
+<P>
+<A HREF="lib/Synchronization/BBMessagePassing.java">
+Capacity Controlled Asynchronous Channel.</A>
+<P>
+<A HREF="lib/Synchronization/MessagePassingReceiveOnly.java">
+Receive-Only Rights Channel.</A>
+<A HREF="lib/Synchronization/MessagePassingSendOnly.java">
+Send-Only Rights Channel.</A>
+These two filter classes can be wrapped around a message passing
+channel to permit only sending or receiving on the channel.
+This is done by overriding the restricted method with one that throws
+<TT>NotImplementedMethodException</TT>.
+<P>
+<A HREF="lib/Synchronization/PipedMessagePassing.java">
+Integers and Floating-Point Numbers as Messages in a Pipe or Socket Channel.</A>
+The numbers are passed as binary or raw data types
+through a pipe within the same JVM or a socket between different JVMs.
+<P>
+<A HREF="lib/Synchronization/ObjPipedMessagePassing.java">
+Serialized Objects as Messages in a Pipe or Socket Channel.</A>
+The objects are serialized and deserialized using the <TT>writeObject()</TT>
+and <TT>readObject()</TT> methods
+through a pipe within the same JVM or a socket between different JVMs.
+</OL>
+</P>
+
+<A NAME="MESSE"><H3>Example Programs</H3>
+
+<P>
+This is a
+<A HREF="Messaging/snrc.java">simple example</A>
+illustrating both synchronous and asynchronous message passing.
+</P>
+
+<P>
+We can implement the bounded buffer producer and consumer with a
+set of empty messages representing the buffer slots.
+<OL>
+<A HREF="Messaging/bbmp.java">Message Set Forms a Bounded Buffer.</A>
+</OL>
+</P>
+
+<P>
+This is a testing program for asynchronous, synchronous, finite buffer,
+and piped message passing within the same JVM.
+There are two types of threads in this collection of threads:
+those that produce work and those that perform or consume the produced
+work.
+A producer puts the work to be done into a message passing channel
+that is called a <I>bag of tasks</I>
+because consumers reach into the bag to extract the next piece of work
+to do.
+If there is just a single thread producing work with many threads
+reaching into the bag, then this technique is called <I>master/worker</I>
+or <I>worker crew</I>.
+<OL>
+<A HREF="Messaging/bagt.java">``Bag of Tasks'' for Worker Crew.</A>
+</OL>
+</P>
+
+<P>
+Threads can use semaphores and monitors to handle mutual
+exclusion and condition synchronization.
+Suppose though the threads do not share memory but are in nodes
+that have private memories and CPUs on a LAN
+and suppose they still want to do condition
+synchronization to coordinate access to some shared resource.
+If all we have is message passing, can we implement some sort of
+<I>distributed mutual exclusion</I> algorithm?
+Suppose we also want to avoid a central server to avoid a bottleneck.
+We want to solve the <I>N</I> node mutual exclusion problem such that it
+<UL>
+<LI> works in a distributed environment
+<LI> does not involve a central server
+</UL>
+Assumptions:
+<UL>
+<LI> error-free communication channels between all nodes, i.e., no lost
+    or garbled messages,
+<LI> but messages can arrive in a different order than they were sent,
+<LI> nodes do not fail or halt, either inside or outside their
+    critical sections.
+</UL>
+In other words, nodes eventually respond to all request messages.
+</P>
+
+<P>
+Basic Idea:
+<OL>
+<PRE>
+while (true) {
+  outsideCS();
+  chooseNumber();
+  sendItToAllOtherNodes();
+  waitForMessageFromAllOtherNodes();
+  insideCS();
+  postProtocol();
+}
+</PRE>
+</OL>
+Each of the <I>N</I> nodes is really three threads executing concurrently
+(the three threads are executing on the CPU/memory of the node).
+<OL>
+<LI> One does the above <TT>while</TT> loop.
+<LI> Another handles requests from other nodes.
+<LI> Another one waits for replies from all other nodes.
+</OL>
+</P>
+
+<P>
+A node sends a ``reply'' or acknowledgement message to a node that
+has sent a request message, i.e., when ``asked'':
+<UL>
+<LI> immediately if the other node has a lower number (higher priority)
+    or if it is not trying to enter its critical section,
+<LI> deferred (until it gets into then out of its critical section) if
+    the other node has a higher sequence number (lower priority).
+<LI> Ties are broken by node ID.
+<LI> A node chooses its number by adding 1 to the highest number it has seen
+    so far in incoming messages from other nodes.
+</UL>
+</P>
+
+<P>
+In the absence of shared memory, a collection of Java threads can use this
+technique to implement mutual exclusion.
+The threads send messages to all other threads, asking for permission
+to enter their critical sections.
+The threads are all in the same JVM, but we say memory is not shared
+here because the threads do not share any variables, semaphores, or
+monitors.
+<OL>
+<A HREF="Messaging/dimu.java">Distributed Mutual Exclusion.</A>
+</OL>
+</P>
+
+<P>
+The quick sort algorithm can be parallelized for a shared memory
+multiple CPU machine by dedicating each CPU to a worker thread
+and using a message passing channel as a bag of tasks.
+The <TT>main()</TT> method puts the whole array to be sorted into
+the bag.
+A worker extracts the task, chooses a pivot point, and partitions
+the array.
+Each of the two partitions is then put back into the bag
+for one of the workers to perform.
+Even though message passing is being used for a bag of tasks,
+shared memory is still required because the array is being
+sorted ``in place'' and the work requests being put into the bag
+are array index pairs and not pieces of the array itself.
+<OL>
+bag of tasks communication channel:
+<OL>
+<PRE>
+AsyncMessagePassing task = new AsyncMessagePassing();
+</PRE>
+</OL>
+<P>
+quicksort threads get work:
+<OL>
+<PRE>
+while (true) {
+   m = (Task) receive(task);
+   quickSort(id, m.left, m.right);
+}
+</PRE>
+</OL>
+<P>
+quicksort threads create work:
+<OL>
+<PRE>
+if (right-(l+1) > 0) send(task, new Task(l+1, right));
+if ((l-1)-left > 0) send(task, new Task(left, l-1));
+</PRE>
+</OL>
+<P>
+<A HREF="Animations/aqus.java">Animated Worker Crew Quick Sort.</A>
+<P>
+<IMG SRC="Animations/aqus.gif">
+</OL>
+</P>
+
+<P>
+These consumers are picky and only conditionally accept messages
+that are smaller than some limit.
+This program tests both synchronous and asynchronous conditional
+message passing.
+<OL>
+<A HREF="Messaging/mlpc.java">Conditional Consumers.</A>
+</OL>
+</P>
+
+<P>
+The <I>distributed dining philosophers</I> do not have a central
+server they can query for fork availability.
+Instead each philosopher has a servant who communicates with the
+two neighboring servants to negotiate the use of the forks.
+The servants pass <TT>needL</TT>, <TT>needR</TT>,
+<TT>passL</TT>, and <TT>passR</TT> messages back and forth.
+Each fork is always in the possession of some philosopher,
+one of the two on either side of the fork.
+When a philosopher finishes eating, it labels its two forks as dirty.
+A hungry philosopher's servant is required to give up a dirty fork in its
+possession, if asked for by its hungry neighbor's servant.
+This prevents starvation.
+Study carefully how conditional message passing is used.
+Does it matter if synchronous were used instead?
+<OL>
+<A HREF="Messaging/ddph.java">Distributed Dining Philosophers.</A>
+<P>
+Here is a screen snapshot of an
+<A HREF="Animations/addp.java">animated</A>
+version.
+<P>
+<IMG SRC="Animations/addp.gif">
+</OL>
+</P>
+
+<A NAME="RENDZ"><H2>Rendezvous</H2>
+
+<P>
+An extended rendezvous is also called a <I>remote procedure call</I>
+from a client to a server (or a worker to the master)
+because it resembles
+(and syntactic sugar can make it nearly identical to)
+a call to a procedure on a remote machine that is executed there.
+Typically the call represents a request for service, such as reading
+a file that resides on the remote machine.
+The server may handle the request in its main thread or the server may
+spawn a new thread to handle the request while the server's main thread
+handles additional requests for service from other clients.
+The latter gives greater throughput and efficiency since a lengthy
+request would otherwise delay the handling of requests from the
+other clients.
+</P>
+
+<P>
+An addressing mechanism is needed so the client can contact an appropriate
+server.
+In the local case (everything in the same JVM), an object can be used
+as the place for the client and server to ``meet'' and establish a rendezvous.
+The server calls a method in the object and blocks until the client
+calls a method.
+At this point in time, both methods return a newly created object that
+the client and server subsequently use for the two-way flow of information.
+This object contains a message passing channel shared by them.
+In the remote case, the client uses the server's machine name
+and a TCP/IP port number to address the server;
+the server ''listens'' on the TCP/IP port.
+</P>
+
+<A NAME="RENDC"><H3><TT>Synchronization</TT> Package Classes</H3>
+
+<P>
+The extended rendezvous class implements this
+<A HREF="lib/Synchronization/Rendezvous.java">
+<TT>interface</TT></A>.
+</P>
+
+<P>
+An object created from this
+<A HREF="lib/Synchronization/EstablishRendezvous.java">class</A>
+is used for the addressing described above.
+In the local case, one such object is used by both client and server.
+In the remote case, a client creates such an object using the
+server's machine name and port number in the object's constructor;
+the server uses just the port number.
+</P>
+
+<P>
+When the rendezvous occurs, and object constructed from this
+<A HREF="lib/Synchronization/ExtendedRendezvous.java">class</A>
+is returned to both the client and server.
+In the local case (within the same JVM),
+the client and server share this object and
+use it to transact (synchronous message passing of object references).
+In the remote case (between JVMs that might be on different physical machines),
+each gets its own object and the object contains a socket
+to the other JVM (and machine).
+Objects are serialized through the socket.
+The case of sending raw data types
+through a pipe (same JVM) or a socket (different JVMs) is not implemented
+and is an exercise for the reader.
+</P>
+
+<A NAME="RENDE"><H3>Example Programs</H3>
+
+<P>
+This is a local case example.
+A command line option controls whether or not the server spawns off a new
+thread to handle the request.
+The clients and server all share a <TT>EstablishRendezvous</TT> object
+for addressing.
+Each time a client wants to rendezvous with the server,
+it calls the <TT>clientToServer()</TT> method
+to get an <TT>ExtendedRendezvous</TT> object
+whose <TT>clientMakeRequestAwaitReply()</TT> method is used
+to transact with the server.
+The client passes a reference to a <TT>RendezvousRequestReply</TT>
+object to the server.
+The object contains the data and a method for the server to call.
+The <TT>ExtendedRendezvous</TT> object is only used once by the client;
+however, it could be reused for multiple <TT>clientMakeRequestAwaitReply()</TT>
+calls as is done in the next example.
+<OL>
+<A HREF="Rendezvous/clsv.java">Client-Server Rendezvous.</A>
+</OL>
+</P>
+
+<P>
+This is a remote case example.
+Suppose there are workstations named
+<TT>client0</TT>, <TT>client1</TT>, <TT>client2</TT>, <TT>client3</TT>, and
+<TT>client4</TT> connected together on a local area network,
+along with a machine named <TT>server</TT>.
+The example compile and run shows for UNIX how to run
+each philosopher is in its own JVM on a different physical machine.
+Each philosopher sends an <TT>Integer</TT> object containing its ID value
+to the server when it is hungry.
+Since this is a rendezvous, the philosopher is blocked until it gets
+a reply indicating that its forks are available.
+The server spawns a new thread for each philosopher to handle the
+transactions.
+Each philosopher sends an <TT>Integer</TT> object containing its -ID-1 value
+when putting its forks down.
+Each philosopher has its own <TT>ExtendedRendezvous</TT> object
+whose <TT>clientMakeRequestAwaitReply()</TT> it calls over and over
+again (in contrast to the previous example,
+in which the clients obtained a new <TT>ExtendedRendezvous</TT> object
+for each transaction with the server).
+<OL>
+<A HREF="Rendezvous/dpmm.java">Multi-Machine Dining Philosophers.</A>
+</OL>
+</P>
+
+<P>
+This program attempts to measure the amount of time it takes to
+transact a rendezvous.
+A client sends a message containing an array of length <I>N</I>
+to the server.
+The server adds one to each entry of the array and sends it back.
+The client does this <I>M</I> times
+and calculates the number of bytes sent per millisecond.
+The program can be run in two ways.
+The local run passes the message as a reference from the client to the
+server within the same JVM.
+The remote run serializes the message containing the array through
+a socket over the network to the server running in a different JVM,
+possibly on another physical machine.
+<OL>
+<A HREF="Rendezvous/ping.java">Measure Rendezvous Time.</A>
+</OL>
+</P>
+
+<A NAME="CREND"><H3>Conditional Rendezvous</H3>
+
+<P>
+Synchronous
+conditional message passing corresponds to a conditional simple rendezvous,
+that is, once the condition is met there is a one-way flow of
+information in the form of a message object from the client to the server.
+This
+<A HREF="lib/Synchronization/ConditionalRendezvous.java">
+<TT>class</TT></A> implements an extended <I>guarded</I> or <I>conditional</I>
+rendezvous in which there is a two-way flow of information once a server finds
+a client message meeting the condition.
+This class is a combination of <TT>EstablishRendezvous</TT>
+and <TT>ExtendedRendezvous</TT> with the condition added.
+The client calls the <TT>clientTransactServer()</TT> method of
+the <TT>ConditionalRendezvous</TT> object, while the server first
+calls <TT>serverGetClient()</TT> to get a client meeting the condition
+and then the server uses the <TT>Rendezvous</TT> object returned
+to interact with the client (<TT>serverGetRequest()</TT> and
+<TT>serverMakeReply()</TT>).
+The condition class has been
+<A HREF="lib/Synchronization/RendezvousCondition.java">enhanced</A>
+with more information passed to the <TT>checkCondition()</TT>
+method so the condition check can be based on information gathered about
+all outstanding messages.
+</P>
+
+<P>
+An example using a condition that depends only on the message passed and
+not on other messages is the dining philosophers classical problem.
+As an exercise, add code to prevent starvation.
+As another exercise, implement the bounded buffer multiple producers and
+consumers with a conditional rendezvous.
+Then implement the starvation-free database readers and writers
+with a conditional rendezvous.
+<OL>
+<A HREF="Rendezvous/dpre.java">Dining Philosophers Conditional Rendezvous.</A>
+<P>
+<A HREF="Monitors/dpdr.java">The Dining Philosophers Driver.</A>
+</OL>
+</P>
+
+<P>
+Multiple calls by servers to the <TT>serverGetClient()</TT> method
+can be outstanding, that is blocked, waiting for a client message
+meeting the condition.
+A server can call <TT>serverGetClient()</TT> and before completing the
+rendezvous with that client, the server can call it again,
+so a server can be handling several rendezvous with different clients
+simultaneously.
+This is illustrated with the following banking example.
+If <TT>starvationFree</TT> is false, a large withdrawal
+can sit in the queue, while later smaller withdrawals succeed.
+In contrast, if <TT>starvationFree</TT> is true, then the
+server (bank thread) accepts only deposits and no withdrawals
+until the bank balance is large enough to accept the waiting large
+withdrawal.
+The <TT>-a</TT> option sets the requirement that all deposits are processed
+before any withdrawals.
+The condition checking now depends not only on the message passed but also
+on the other messages in the queue.
+The <TT>-B</TT> option adds additional banks, which is not realistic,
+but was done to test simultaneously executing servers.
+<OL>
+<A HREF="Rendezvous/bnkr.java">Bank Deposits and Withdrawals.</A>
+</OL>
+</P>
+
+<A NAME="SURMI"><H2>Remote Method Invocation</H2>
+
+<P>
+Sun Microsystems has added a <I>remote method invocation</I>
+capability to Java, the ability to make remote procedure calls.
+The latter term we used above to describe an extended rendezvous
+between two threads in different JVMs, perhaps on different
+physical machines.
+Sun's RMI allows a thread in one JVM to invoke (call) a method in
+an object in another JVM that is perhaps on a different physical
+machine.
+A new thread is created in the other (remote) JVM to
+execute the called method.
+The following example shows how to use it.
+The <TT>ComputeServer</TT> remote object implements a <TT>Compute</TT>
+interface containing a <TT>compute()</TT> method
+that a local <TT>Client</TT> can call, passing a <TT>Work</TT>
+object whose <TT>doWork()</TT> method the server calls.
+The client is using the remote server to have work performed on its
+behalf (adding vectors).
+Presumably the server is running on a computer architecture that
+can perform the work more efficiently.
+Parameters to the remote method and the method's return result, if any,
+are passed from one JVM to the other using
+object serialization over the network.
+</P>
+
+<P>
+Two sample runs are attached as a comment to the end of the program file.
+The first was executed on a PC running
+Windows 95 using the default port for communication.
+The second was executed on two Sun workstations, each running Solaris 2.x,
+using a port other than the default specified by the user.
+<OL>
+<A HREF="RMI/Compute.java">Remote Method Invocation Example.</A>
+</OL>
+</P>
+
+<H3>Laboratory Exercises</H3>
+
+<P>
+<OL>
+<LI>Will the <A HREF="Messaging/bbmp.java">bounded buffer</A> formed from
+     a set of empty messages work with multiple producers and/or consumers?
+<LI><A HREF="Labs/golMP.html">``Game of Life''</A>
+<LI>Modify the <A HREF="Rendezvous/dpre.java">dining philosophers
+    conditional rendezvous</A> so that it prevents starvation.
+<LI>Write a fair readers and writers database using a (conditional)
+    rendezvous.
+<LI>Write a fair unisex bathroom using a (conditional) rendezvous.
+<LI><A HREF="Labs/multiRiderCarsRen.html">Multirider Bumper Cars</A>
+<LI><A HREF="Labs/elevatorCR.html">Building Elevator</A>
+<LI>Write a fair dining philosophers, a fair readers and writers, or
+    a fair unisex bathroom using RMI (remote method invocation).
+<LI><A HREF="Labs/multiRiderCarsRMI.html">Multirider Bumper Cars</A>
+</OL>
+</P>
+
+<HR>
+
+<P>
+Last modified 30 December 1997.
+</P>
+
+<P>
+<EM>&#169 1997 Stephen J. Hartley<EM>
+</P>
+
+<P>
+<ADDRESS><A HREF="http://www.mcs.drexel.edu/~shartley">SJH</A></ADDRESS>
+<ADDRESS>
+<A HREF="mailto:shartley@mcs.drexel.edu">shartley@mcs.drexel.edu</A>
+</ADDRESS>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,275 @@
+<HTML>
+<HEAD>
+<TITLE>Concurrent Programming Using the Java Language</TITLE>
+<LINK REV="OWNER" HREF="mailto:shartley@mcs.drexel.edu">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" ALINK="#FF0000" VLINK="#000080">
+
+<A NAME="PARAP"><H2>Parallel Processing</H2>
+
+<P>
+We have seen one of example of parallelizing an algorithm to use
+multiple CPUs: the animated quick sort
+<A HREF="Animations/aqus.java">example</A>.
+The algorithm requires shared memory since
+the array is sorted ``in place'' and needs to be accessed
+by all the worker threads.
+A bag of tasks is used to distribute the work.
+</P>
+
+<P>
+We can categorize parallel algorithms along several lines,
+using the abbreviations shown in parentheses:
+<OL>
+<LI>
+<I>coarse</I> (CG) versus <I>fine grain</I> (FG),
+determined by the frequency of thread synchronization or communication
+relative to the amount of computation being done;
+<P>
+<LI>
+shared memory (SM) multiprocessor versus distributed memory (DM) CPUs,
+determined by the presence of shared data;
+<P>
+<LI>
+message passing (MP) versus
+semaphores, monitors, barriers, or <TT>join()</TT> (SY),
+where the latter set requires shared memory
+but the first does not imply distributed memory;
+<P>
+<LI>
+worker crew (WC) with a bag of tasks and a fixed number of
+workers, perhaps based on the number of CPUs,
+versus <I>data parallelism</I> (DP),
+where the amount of data or work to do
+determines the number of worker threads spawned
+and CPUs needed.
+</OL>
+</P>
+
+<P>
+In some cases the need for shared memory can be relaxed.
+If the shared data is read-only, it can be replicated or
+broadcast to each distributed memory and the copy stored there.
+In other situations, it might be possible to pass the shared data
+around as a message, to be updated by the currently owning thread.
+For example, it might be possible to replace
+<OL>
+<PRE>
+/* shared */ int N;
+/* shared */ Object mutex = new Object();
+                     // ...
+synchronized (mutex) { N = N + 1; }
+</PRE>
+</OL>
+with
+<OL>
+<PRE>
+/* local */ int N;
+                     // ...
+N = receive(channel);
+N = N + 1;
+send(channel, N);
+</PRE>
+</OL>
+</P>
+
+<P>
+There is too much overhead and inefficiency with FG unless
+the communication and synchronization tools are highly optimized,
+perhaps with hardware support.
+DM can be a network of workstations (NOW) or a specialized parallel
+architecture in which each CPU has its own memory and there is
+some kind of fast interconnect or switch connecting them.
+</P>
+
+<A NAME="PARAC"><H3><TT>Synchronization</TT> Package Classes</H3>
+
+<P>
+On a shared memory platform, a <I>barrier</I> can be used for thread
+synchronization.
+It is an extension of the semaphore idea.
+No thread can continue past the barrier until all threads have arrived
+at the barrier;
+in other words, each thread arriving at the barrier blocks
+until all the other threads have arrived.
+There are two constructors and two versions of the <TT>gate()</TT>
+method: for a one-dimensional and a two-dimensional structure of the
+data and threads.
+<OL>
+<A HREF="lib/Synchronization/Barrier.java">
+A Barrier for Thread Synchronization.</A>
+</OL>
+</P>
+
+<A NAME="PARAE"><H3>Example Programs</H3>
+
+<P>
+These examples are categorized according to
+CG or FG, SM or DM, MP or SY, WC or DP.
+</P>
+
+<P>
+Calculate the first <I>n</I> prime numbers.
+Start up <I>n</I> filter threads.
+FG, SM or DM, MP, DP.
+<OL>
+<A HREF="Parallel/pasv.java">Prime Number Sieve.</A>
+</OL>
+</P>
+
+<P>
+Sort an array of length <I>n</I> by creating a pipeline
+of length <I>n</I>.
+FG, SM or DM, MP, DP.
+<OL>
+<A HREF="Parallel/psrt.java">Pipeline Sort.</A>
+</OL>
+</P>
+
+<P>
+Sort an array of length <I>n</I> by creating two sorting
+threads and a merge thread.
+Send half the array to each sorting thread.
+FG, SM or DM, MP, WC.
+Can you finish the code?
+<OL>
+<A HREF="Exercises/meso.java">Merge Sort Skeleton.</A>
+</OL>
+</P>
+
+<P>
+Sort an array of length <I>n</I> by creating <I>n/2</I> worker threads.
+FG, SM or DM, MP, DP.
+Can you finish the code?
+<OL>
+<A HREF="Exercises/cmpx.java">Compare-Exchange Sort Skeleton.</A>
+</OL>
+</P>
+
+<P>
+For an <I>N</I>-by-<I>N</I> chess board,
+start up a thread for each row in column one that a queen can be placed.
+The size of the board could be broadcast to each thread for DM.
+CG, SM or DM, MP, DP.
+<OL>
+<A HREF="Parallel/pque.java">Data Parallel N-Queens.</A>
+</OL>
+</P>
+
+<P>
+For each CPU,
+start up a worker thread that reads a row number for the column one queen
+from the bag of tasks.
+CG, SM or DM, MP, WC.
+<OL>
+<A HREF="Parallel/qumw.java">Master/Worker N-Queens.</A>
+</OL>
+</P>
+
+<P>
+Modify the previous example so each worker executes on a networked
+workstation.
+The rendezvous technique is used:
+each worker is like a client that asks the server for more work to do.
+The program can also be run entirely locally with the <TT>-w</TT>
+command line option.
+This tests the three kinds of <TT>EstablishRendezvous</TT> objects
+that can be constructed.
+CG, DM, MP, WC.
+<OL>
+<A HREF="Parallel/qumm.java">Multi-Machine Master/Worker N-Queens.</A>
+</OL>
+</P>
+
+<P>
+Sort an array of length <I>n</I>.
+In this example, every thread needs to communicate with every other
+thread, possible in SM,
+networked workstations, or a specialized DM architecture.
+FG, SM or DM, MP, DP.
+<OL>
+<A HREF="Parallel/rads.java">Radix Sort.</A>
+</OL>
+</P>
+
+<P>
+CG, SM, SY, DP.
+<OL>
+<A HREF="Parallel/matj.java">Matrix Multiply Threads Using <TT>join()</TT>.</A>
+</OL>
+</P>
+
+<P>
+CG, SM, SY, DP.
+<OL>
+<A HREF="Parallel/matt.java">Matrix Multiply Threads Using a Semaphore.</A>
+</OL>
+</P>
+
+<P>
+FG, SM, SY, DP.
+<OL>
+<A HREF="Parallel/grba.java">Laplace Grid Using a Barrier.</A>
+</OL>
+</P>
+
+<P>
+Create a new worker thread each time a section of the array is
+partitioned.
+CG, SM, SY, DP.
+<OL>
+<A HREF="Parallel/qsrt.java">Data Parallel Quick Sort.</A>
+</OL>
+</P>
+
+<P>
+FG, SM or DM, MP, DP.
+<OL>
+<A HREF="Parallel/mats.java">Systolic Array Matrix Multiply.</A>
+</OL>
+</P>
+
+<P>
+Replace the shared grid array and the barrier with message passing.
+FG, SM or DM, MP, DP.
+<OL>
+<A HREF="Parallel/gr4c.java">Laplace Grid Using Message Passing.</A>
+</OL>
+</P>
+
+<H3>Laboratory Exercises</H3>
+
+<P>
+<OL>
+<LI>Implement one-way merge sort in Java using message passing.
+<LI>Implement multi-way (binary tree) merge sort using message passing.
+<LI>Write a pipeline sieve of Eratosthenes using message passing.
+<LI>Complete the <A HREF="Exercises/cmpx.java">
+    compare-exchange sort skeleton</A> using message passing.
+<LI>Convert the sequential ``Game of Life'' simulation program into
+    a multithreaded one where each cell has its own thread.
+    Use semaphores, a <A HREF="lib/Synchronization/Barrier.java">
+    barrier</A>, or message passing for synchronization.
+<LI>Animate one or more of the above programs.
+</OL>
+</P>
+
+<HR>
+
+<P>
+Last modified 10 September 1997.
+</P>
+
+<P>
+<EM>&#169 1997 Stephen J. Hartley<EM>
+</P>
+
+<P>
+<ADDRESS><A HREF="http://www.mcs.drexel.edu/~shartley">SJH</A></ADDRESS>
+<ADDRESS>
+<A HREF="mailto:shartley@mcs.drexel.edu">shartley@mcs.drexel.edu</A>
+</ADDRESS>
+</P>
+</BODY>
+</HTML>

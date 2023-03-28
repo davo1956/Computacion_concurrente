@@ -1,0 +1,66 @@
+<HTML>
+<HEAD>
+<TITLE>Semaphore Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>More Baboons Crossing a Canyon aka Unisex Bathroom</H1>
+
+<P>
+This is a continuation of Exercise 4.7 of the text.
+Now worry about starvation, that is, do the second part.
+</P>
+
+<P>
+First, take your original program and run it with command line
+parameters that show starvation occuring.
+Explain how you did this, giving the parameters you used.
+</P>
+
+<P>
+Then modify your program to prevent starvation and re-run it with the
+same parameters that gave starvation before.
+Compare your results.
+</P>
+
+<P>
+Describe which of the two approaches to starvation
+prevention you picked to implement:
+strict serialization or platooning (batching).
+</P>
+
+<P>
+For the purposes of this assignment, you may assume that semaphore
+queueing is FIFO, that is, successive <TT>V(S)</TT> calls on a semaphore
+<TT>S</TT> will unblock threads in the order that they blocked when
+they did their <TT>P(S)</TT> calls.
+</P>
+
+<P>
+As in all our programming assignments, use command line arguments
+to set the simulation parameters, such as the number of males, females,
+baboons of each type, maximum nap time outside the bathroom,
+maximum nap time inside the bathroom, etc.
+</P>
+
+<P>
+To find the cause of deadlock,
+remember that a thread blocks when doing a <TT>P()</TT>
+on a semaphore with zero value.
+To find where each thread is blocked in the deadlock,
+put a <TT>System.out.println()</TT> before each <TT>P()</TT>
+and a <TT>System.out.println()</TT> after each <TT>P()</TT>
+so you can see how far each thread is getting before blocking
+and see if it is getting past a <TT>P()</TT>.
+</P>
+
+<P>
+Animate your program using
+<A HREF="../lib/XtangoAnimation/XtangoAnimator.java">
+<TT>XtangoAnimator.java</TT></A>.
+First do the base assignment as specified above and turn it in.
+Then do an animation of it as a separate program.
+</P>
+
+</BODY>
+</HTML>

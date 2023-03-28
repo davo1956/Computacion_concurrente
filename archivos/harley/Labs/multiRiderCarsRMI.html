@@ -1,0 +1,97 @@
+<HTML>
+<HEAD>
+<TITLE>RMI Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Multiple-Person Bumper Car Ride: RMI</H1>
+
+<P>
+Modify your multiple-person bumper car program so that
+the coordinator class is registered (<TT>rmiregistry</TT>)
+on <TT>jubjub</TT> and called remotely from <TT>cheshire</TT> by the
+car threads and from <TT>queen</TT> by the rider threads.
+Eliminate the restriction that at most two cars can be on the
+bumping floor at any one time, that is,
+as many cars as are full of riders and ready to bump can enter the floor.
+Your coordinator can use whatever you want except for busy-waiting
+for its internal synchronization.
+</P>
+
+<P>
+Your coordinator class will have the interface routines
+<PRE>
+getInLine(ID)
+waitCarFull(ID)
+takeAride(ID)
+load(ID)
+unload(ID)
+</PRE>
+called by the riders and cars.
+The bumper car is a separate class that is created multiple times.
+Ditto the rider class.
+</P>
+
+<P>
+You will have to run your owm <TT>rmiregistry</TT> on a port
+number between 1024 and 65535 that you pick at random that nobody else
+in the class is using.
+Here is how to run the
+<A HREF="../RMI/Compute.java">example</A>
+we looked at in class with 7777 picked as the random port,
+the server on <TT>jubjub</TT> and the client on <TT>cheshire</TT>.
+<PRE>
+jubjub% javac Compute.java
+jubjub% rmic ComputeServer
+jubjub% rmiregistry 7777 &
+[1] 22850
+jubjub% java ComputeServer -Mjubjub:7777 &
+[2] 22858
+ server ComputeServer has been created on jubjub:7777
+  and bound in the registry to the name ComputeServer
+    .....
+cheshire% java Client -Mjubjub:7777
+Client: serverMachine=jubjub:7777, serverName=ComputeServer, numClients=3
+ napTime=4, runTime=20
+age=4025, Client 0 sending to server work:
+Work from Client 0
+a= -2.83809 0.00930895 -4.61518 -2.22758 3.58825
+b= 3.73225 -2.23148 -1.82137 2.15583 2.77105
+c= 0 0 0 0 0
+   .....
+</PRE>
+</P>
+
+<P>
+You <B>MUST</B> clean up after yourself each time you logout!
+Points will be taken off for any <TT>rmiregistry</TT>s
+or any <TT>Coordinator</TT> servers that are left running on any machines.
+Use the <TT>ps</TT> command to see what you have running in the background
+and the <TT>kill</TT> command to get rid of processes before logging out.
+There are two versions of the command.
+Here are example uses of each version of <TT>ps</TT>
+and the <TT>kill</TT> command.
+Of course, replace <TT>janedoe</TT> with your login id.
+<PRE>
+jubjub% /usr/ucb/ps uxww
+USER       PID %CPU %MEM   SZ  RSS TT       S    START  TIME COMMAND
+janedoe   4282  3.3  5.6 3864 1724 ?        S   Feb 26 76:16 /home/janedoe/JDK_1.0.2/java/bin/../bin/sparc/java ParkServer -Mjubjub:5557
+janedoe   2788  3.0  4.6 3620 1440 ?        S   Feb 25 72:26 /home/janedoe/JDK_1.0.2/java/bin/../bin/sparc/java sun.rmi.registry.RegistryI
+
+jubjub% kill -9 4282 2788
+
+jubjub% /usr/bin/ps -u janedoe
+   PID TTY      TIME COMD
+  4282 ?       76:26 java
+  2788 ?       72:34 java
+
+jubjub% kill -9 4282 2788
+</PRE>
+You can also try the following.
+<PRE>
+jubjub% /usr/ucb/ps uaxww | grep janedoe
+</PRE>
+</P>
+
+</BODY>
+</HTML>

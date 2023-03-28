@@ -1,0 +1,313 @@
+<HTML>
+<HEAD>
+<TITLE>Concurrent Programming Using the Java Language</TITLE>
+<LINK REV="OWNER" HREF="mailto:shartley@mcs.drexel.edu">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" ALINK="#FF0000" VLINK="#000080">
+
+<A NAME="SEMAP"><H2>Semaphores</H2>
+
+<P>
+<I>Semaphores</I> can be used for mutual exclusion and thread synchronization.
+Instead of busy waiting and wasting CPU cycles,
+a thread can block on a semaphore (the operating system removes the thread
+from the CPU scheduling or ``ready'' queue)
+if it must wait to enter its critical section or if the resource
+it wants is not available.
+</P>
+
+<P>
+Mutual exclusion pseudocode: <BR>
+semaphore S = 1; ...  P(S); N=N+1; V(S);
+</P>
+
+<P>
+Condition synchronization pseudocode (resource availability): <BR>
+semaphore tapeDrives = 7; ...
+P(tapeDrives); useTapeDrive(); V(tapeDrives);
+</P>
+
+<P>
+Java has implicit <I>binary</I> semaphores of the form
+<OL>
+<PRE>
+Object mutex = new Object();
+   /*...*/
+synchronized (mutex) {
+   /*...*/
+}
+</PRE>
+</OL>
+that can be used for mutual exclusion.
+Only one thread at a time can be executing
+inside the <TT>synchronized</TT> block.
+<P>
+<OL>
+<A HREF="Semaphores/norc.java">An Implicit Binary Semaphore Prevents the Race Condition.</A>
+<P>
+<A HREF="Semaphores/nor2.java">An Implicit Binary Semaphore Prevents Another Race Condition.</A>
+<P>
+<OL>
+Why is the semaphore <TT>mutex</TT> also used in the <TT>Auditor</TT> thread?
+Isn't it enough just to make the moving of money from one account to
+another in the <TT>ATM</TT> thread into a single atomic action?
+</OL>
+<P>
+</OL>
+</P>
+
+<P>
+Java does not have explicit binary and <I>counting</I> semaphores,
+so they are provided as classes
+in the <TT>Synchronization</TT> subdirectory of the <TT>lib</TT> directory.
+Their implementation is shown later.
+Two explicit binary semaphores, one initialized to zero
+(impossible with an implicit binary semaphore),
+and one explicit counting semaphore
+are used to synchronized three threads so they obey the ``rules.''
+The ``syntactic sugar'' in
+<A HREF="lib/Utilities/MyObject.java"><TT>MyObject.java</TT></A>
+lets us write <TT>P(S)</TT> instead of <TT>S.P()</TT> for a
+semaphore <TT>S</TT>.
+<P>
+<OL>
+<A HREF="Semaphores/ABCs.java">Explicit Binary and Counting Semaphores Synchronize Three Threads.</A>
+</OL>
+</P>
+
+<P>
+A producer thread deposits items and blocks if the bounded buffer fills up.
+A consumer thread fetches items and blocks if the bounded buffer is empty.
+<P>
+<OL>
+<IMG SRC="Semaphores/bbou.gif">
+</OL>
+<P>
+The implementation shown uses a circular array and can be used only
+with a single producer thread and a single consumer thread.
+Do you see why?
+<P>
+<OL>
+<A HREF="Semaphores/bbou.java">The Bounded Buffer for a Producer and Consumer.</A>
+<P>
+<A HREF="Semaphores/bbpc.java">The Producer and Consumer Driver.</A>
+</OL>
+</P>
+
+<P>
+A linked list can be used to implement a first-in-first-out buffer that is
+not bounded and can be used by multiple producer threads and multiple
+consumer threads.
+<P>
+<OL>
+<A HREF="Semaphores/unbb.java">The Unbounded Buffer for the Producers and Consumers.</A>
+<P>
+<A HREF="Semaphores/bbml.java">The Producers and Consumers Driver.</A>
+</OL>
+</P>
+
+<P>
+Bounded buffers can be used to communicate information from one thread
+to another in a <I>pipeline</I>.
+<P>
+<OL>
+<A HREF="Semaphores/pipe.java">A Pipeline Using Bounded Buffers.</A>
+</OL>
+</P>
+
+<P>
+Semaphores can be used to solve the so-called ``classical''
+synchronization problems found in many operating systems books:
+the <I>sleeping barber</I>,
+the five <I>dining philosophers</I>,
+and the database <I>readers and writers</I>.
+</P>
+
+<P>
+A barber waits to cut hair.
+Customers enter the waiting room and take a seat if one is available.
+If the waiting room is full, they try again later.
+Otherwise, they wait until their turn for a hair cut.
+<P>
+<OL>
+<IMG SRC="Semaphores/slba.gif">
+<P>
+<A HREF="Semaphores/slba.java">The Sleeping Barber.</A>
+</OL>
+</P>
+
+<P>
+Five philosophers sit around a table and think until hungry.
+Interspersed between the philosophers are five forks.
+A hungry philosopher must have exclusive access to both its left and
+right forks in order to eat.
+If they are not both free, the philosopher waits.
+The following algorithm does not deadlock (it never happens that
+all philosophers are hungry, each holding one fork and waiting for the other),
+allows maximal parallelism
+(a philosopher never picks up and holds a fork while waiting
+for the other fork to become available
+when the fork it is holding could be used for eating by its neighbor),
+an advantage,
+but also allows starvation
+(a philosopher's two neighbors can collaborate and alternate their
+eating so the one in the middle never can use the forks).
+<P>
+<OL>
+<IMG SRC="Semaphores/dphi.gif">
+<P>
+<A HREF="Semaphores/dphi.java">The Server for the Dining Philosophers.</A>
+<P>
+<A HREF="Semaphores/dpdr.java">The Dining Philosophers Driver.</A>
+</OL>
+</P>
+
+<P>
+If a philosopher can hold a fork while waiting for the other fork,
+deadlock is possible, an extreme case of not having maximal parallelism.
+However, starvation is not possible.
+Each fork is represented by a semaphore and each hungry philosopher
+does a ``P'' on its left fork and then its right fork.
+<P>
+<OL>
+<A HREF="Semaphores/dphf.java">The Dining Philosophers Server Where Each Fork is a Semaphore.</A>
+</OL>
+</P>
+
+<P>
+We can fix the deadlock problem and retain no starvation,
+but we still do not have maximal parallelism.
+All philosophers pick up left then right except one designated
+philosopher who picks up right then left.
+<P>
+<OL>
+<A HREF="Semaphores/dpho.java">The Dining Philosophers Server Where One is ``Odd''.</A>
+</OL>
+</P>
+
+<P>
+A database can be accessed concurrently by threads that only want to read,
+but a writer thread must have exclusive access with respect to other
+readers and writers.
+The solution here allows writers to starve if enough readers keep coming along
+to read the database that the number of current readers is always above zero.
+<P>
+<OL>
+<IMG SRC="Semaphores/rdwr.gif">
+<P>
+<A HREF="Semaphores/rdwr.java">The Database for the Readers and Writers.</A>
+<P>
+<A HREF="Semaphores/rwdr.java">The Readers and Writers Driver.</A>
+</OL>
+</P>
+
+<P>
+This sequence of attempts to implement counting semaphores
+with binary semaphores
+illustrates some of the subtleties of pure binary semaphores and
+thread scheduling.
+The first two attempts have a problem if a context switch occurs at
+point <TT>A</TT> since then <TT>V</TT>'s on the binary semaphore
+<TT>blocked</TT> may get lost.
+The third solves that problem but introduces more context switching overhead.
+The last two are good solutions, with the latter being somewhat simpler.
+<P>
+<OL>
+<A HREF="Semaphores/bis1.java">Attempt 1.</A>
+<P>
+<A HREF="Semaphores/bis2.java">Attempt 2.</A>
+<P>
+<A HREF="Semaphores/bis3.java">Attempt 3.</A>
+<P>
+<A HREF="Semaphores/bis4.java">Attempt 4.</A>
+<P>
+<A HREF="Semaphores/bis5.java">Attempt 5.</A>
+</OL>
+</P>
+
+<P>
+Jurassic Park consists of a safari area, a number of single-passenger
+safari cars, some number of people,  and a museum.
+Each person in the park visits the museum for a random amount of time,
+then line up to take a safari ride, waiting for an empty car.
+Each car waits for a passenger, then goes out on safari for a random
+amount of time.
+The following solution has a major flaw.
+What is it?
+How can the flaw be fixed?
+<P>
+<OL>
+<A HREF="Exercises/Jura.java">Jurassic Park.</A>
+</OL>
+</P>
+
+<P>
+Lest you think the use of mutual exclusion locks (binary semaphores)
+always removes race conditions, read this account of a
+<A HREF="raceMutex.html">recent real-life race condition</A>
+involving the Pathfinder mission to the planet Mars in 1997.
+</P>
+
+<P>
+The <TT>XtangoAnimator</TT> class in the <TT>XtangoAnimation</TT>
+subdirectory of the <TT>lib</TT> directory
+can be used to animate the dining philosophers.
+<P>
+<OL>
+<A HREF="Animations/adph.java">Animated Dining Philosophers.</A>
+<P>
+A screen snapshot of the dining philosophers:
+<P>
+<IMG SRC="Animations/adph.gif">
+</OL>
+</P>
+
+<H3>Laboratory Exercises</H3>
+
+<P>
+<OL>
+<LI>Examine <A HREF="Semaphores/bbou.java">the bounded buffer</A>
+    for race conditions if there are multiple producer and/or consumer
+    threads.
+    Fix any race conditions you find.
+<LI><A HREF="Labs/wxyz.html">Printing W, X, Y, and Z</A>
+<LI>Look in some operating systems books for semaphore exercises and write
+    the solutions in Java.
+    Examples are classical problems like the
+    <A HREF="Labs/smokers.html">cigarette smokers</A> and the bakery.
+<LI><A HREF="Labs/bumperCarsSem.html">Bumper Cars</A>
+<LI><A HREF="Labs/multiRiderCarsSem.html">Multirider Bumper Cars</A>
+<LI><A HREF="Labs/baboons.html">Baboons</A>
+<LI><A HREF="Labs/baboonsNoStarve.html">Baboons without Starvation</A>
+<LI><A HREF="Labs/elevator.html">Building Elevator</A>
+<LI>Modify <A HREF="Semaphores/slba.java">the sleeping barber</A> program
+    so there are multiple barbers.
+<LI>Modify the <A HREF="Semaphores/dphi.java">dining philosophers server</A>
+    so that two philosophers cannot collaborate to starve the one
+    between them.
+<LI>Modify the <A HREF="Semaphores/rdwr.java">readers and writers database</A>
+    so that readers cannot starve writers.
+<LI><A HREF="Labs/uniTSPbarrier.html">Unidirectional TSP</A>
+<LI>Animate one or more of these programs.
+</OL>
+</P>
+
+<HR>
+
+<P>
+Last modified 30 December 1997.
+</P>
+
+<P>
+<EM>&#169 1997 Stephen J. Hartley<EM>
+</P>
+
+<P>
+<ADDRESS><A HREF="http://www.mcs.drexel.edu/~shartley">SJH</A></ADDRESS>
+<ADDRESS>
+<A HREF="mailto:shartley@mcs.drexel.edu">shartley@mcs.drexel.edu</A>
+</ADDRESS>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,102 @@
+<HTML>
+<HEAD>
+<TITLE>Monitor Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Multiple Sleeping Barbers</H1>
+
+<P>
+Write a multi-class multithreaded Java program that simulates multiple
+sleeping barbers, all in one barbershop that has a finite number of chairs
+in the waiting room.
+Each customer is instantiated from a single <TT>Customer</TT> class,
+each barber is instantiated from a single <TT>Barber</TT> class.
+The semaphore version with a single barber is
+<A HREF="../Semaphores/slba.java">Program 4.8</A>
+</P>
+
+<P>
+Use a single monitor object instantiated from a class <TT>Salon</TT>
+for synchronization.
+<B>Do not mechanically translate semaphore code into monitor code!</B>
+Each customer thread and each barber thread
+invokes <TT>synchronized</TT>
+monitor method(s) for synchronization.
+No semaphores are allowed.
+No <TT>synchronized</TT> blocks are allowed,
+only <TT>synchronized</TT> methods.
+No busy waiting is allowed.
+No calls to <TT>nap</TT> inside a <TT>synchronized</TT> method are allowed
+(do not nap while holding the monitor object's lock, that is, while inside
+a synchronized method or while inside a method called by a synchronized
+method).
+Do you see why?
+</P>
+
+<P>
+Since each barber has its own area of the salon in which to cut hair,
+the barbers can cut hair concurrently if several customers enter the
+shop wanting haircuts.
+</P>
+
+<P>
+Make sure that customers get haircuts in the order they enter the salon,
+that is first-come-first-served, also called FIFO.
+The salon would get a bad reputation if the barbers showed favoritism
+to some customers or cut hair in a random order.
+Would you go to such a salon?
+</P>
+
+<P>
+Do not worry about the barbers themselves cutting in a fair order
+with respect to each other.
+In other words, if barber A finishes cutting a customer followed a bit
+later by barber B finishing cutting, it is acceptable for barber B
+to get another customer to cut before barber A.
+</P>
+
+<H2>Input Data</H2>
+
+<P>
+The input data consist of six integer (<TT>int</TT>) numbers:
+<I>C</I>, <I>B</I>, <I>g</I>, <I>c</I>, <I>W</I>, and <I>runtime</I>.
+These represent the number of customers, the number of barbers,
+the upper bound on customer hair growing time for the random number generator,
+the upper bound on hair cutting time for the random number generator,
+the number of waiting room chairs, and the simulation runtime,
+respectively.
+The number <I>runtime</I> controls how long the whole program runs,
+i.e., there is a <TT>nap(1000*runtime)</TT> in the <TT>main</TT> method.
+You <B>must</B> parse these five numbers from the command line
+using the <TT>GetOpt</TT> class
+(<A HREF="../lib/Utilities/GetOpt.java">Library Class 2.1</A>).
+The command line has the form
+<OL>
+<TT>% java SleepingBarbers -C </TT><I>C</I><TT> -B </TT><I>B</I><TT> -g </TT><I>g</I><TT> -c </TT><I>c</I><TT> -W </TT><I>W</I> -R </TT><I>runtime</I>
+</OL>
+Remember to give the corresponding variables default values in your
+program to handle missing command line options.
+</P>
+
+<P>
+Remember the flaw in the
+<A HREF="../Exercises/Jura.java">Jurassic Park</A>
+problem!
+Make sure that a customer and the specific
+barber cutting that customer's hair are properly synchronized.
+</P>
+
+<P>
+Stress test your program: one customer and one barber, many customers and few
+barbers, many barbers and few customers, one chair, more than enough chairs.
+</P>
+
+<P>
+Animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

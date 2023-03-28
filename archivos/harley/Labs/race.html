@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<TITLE>Race Conditions Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Race Conditions</H1>
+
+<P>
+This is a modification of Exercise 2
+at the end of Chapter 3 of the text.
+Run <A HREF="../Threads/race.java"><TT>race.java</TT></A>
+and verify that there are no race conditions for
+<TT>M=1000</TT>.
+Explain why you think this is true.
+Introduce time-slicing with a
+<A HREF="../lib/Utilities/Scheduler.java"><TT>Scheduler</TT></A>
+object.
+Experimentally determine the largest time-slice value passed to the
+<TT>Scheduler</TT> object's constructor that will consistently cause
+incorrect output due to a race condition for <TT>M=1000</TT>.
+Report and explain your findings.
+</P>
+
+<P>
+Next, start with a fixed time-slice of 10 milliseconds
+using the <TT>Scheduler</TT>
+and find the smallest value of <TT>M</TT>
+that will consistently cause
+incorrect output due to a race condition.
+Report and explain your findings.
+</P>
+
+<P>
+Finally, answer
+Exercise 5 at the end of Chapter 3 of the text:
+Identify the race condition(s) that could occur in
+<A HREF="../Threads/bwbb.java">Class 3.8</A>
+if there were more than one producer thread and/or consumer thread.
+</P>
+
+</BODY>
+</HTML>

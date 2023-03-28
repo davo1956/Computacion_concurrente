@@ -1,0 +1,77 @@
+<HTML>
+<HEAD>
+<TITLE>Rendezvous Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Multiple-Person Bumper Car Ride: Rendezvous</H1>
+
+<P>
+Modify your multiple-person bumper car program so that
+the coordinator class no longer uses semaphores but uses the
+<I>rendezvous</I> concept instead.
+Eliminate the restriction that at most two cars can be on the
+bumping floor at any one time, that is,
+as many cars as are full of riders and ready to bump can enter the floor.
+</P>
+
+<P>
+Your coordinator class will have the interface routines
+<PRE>
+getInLine(ID)
+waitCarFull(ID)
+takeAride(ID)
+load(ID)
+unload(ID)
+</PRE>
+called by the riders and cars.
+</P>
+
+<P>
+The bumper car is a separate class that is created multiple times.
+Ditto the rider class.
+</P>
+
+<P>
+The coordinator object will create an <TT>EstablishRendezvous</TT>
+object (local case) that the rider and car threads will call indirectly
+through the coordinator interface methods mentioned above.
+When a rider calls <TT>getInLine()</TT>, the coordinator will
+call the <TT>EstablishRendezvous</TT> method <TT>clientToServer()</TT>,
+which returns an <TT>ExtendedRendezvous</TT> object.
+When a rider calls <TT>waitCarFull()</TT>, the coordinator will
+call the <TT>ExtendedRendezvous</TT> method
+<TT>clientMakeRequestAwaitReply()</TT>.
+When a rider calls <TT>takeAride()</TT>, the coordinator will
+again call the <TT>ExtendedRendezvous</TT> method
+<TT>clientMakeRequestAwaitReply()</TT>.
+</P>
+
+<P>
+When a car thread calls <TT>load()</TT>, the coordinator will call the
+<TT>serverToClient()</TT> method of the <TT>EstablishRendezvous</TT>
+object, which will return an <TT>ExtendedRendezvous</TT> object,
+as many times as the car has room for riders.
+Each of these <TT>ExtendedRendezvous</TT> objects will be ``connected''
+to a rider thread.
+Think carefully about whether or not multiple cars should
+be allowed to load at the same time.
+When the car is full, each <TT>ExtendedRendezvous</TT> object will
+have its <TT>serverGetRequest()</TT> and <TT>serverMakeReply()</TT>
+methods called.
+When the car's ride is over, each <TT>ExtendedRendezvous</TT> object will
+have its <TT>serverGetRequest()</TT> and <TT>serverMakeReply()</TT>
+methods called again.
+This will complete two rendezvous with the rider threads:
+<TT>waitCarFull()</TT> and <TT>takeAride()</TT>.
+</P>
+
+<P>
+No semaphores and no busy waiting allowed!
+Only three <TT>nap()</TT>'s are allowed in this program:
+riders wandering, cars bumping, and one in <TT>main()</TT> to shutdown
+the simulation.
+</P>
+
+</BODY>
+</HTML>

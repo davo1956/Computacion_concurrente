@@ -1,0 +1,42 @@
+<HTML>
+<HEAD>
+<TITLE>Message Passing Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Game of Life Simulation Using Message Passing</H1>
+
+<P>
+Write a multi-class parallel Java program
+that simulates the <EM>game of life</EM>.
+Each cell will have its own thread dedicated to it
+to compute the cell's value in the next generation.
+This thread will be embedded in a class that is instantiated
+M*N times by the driver, once for each cell in the grid.
+Thread synchronization will be done with message passing.
+</P>
+
+<P>
+No semaphores, no monitors, and no busy waiting allowed!
+Neither <TT>nap()</TT> nor <TT>sleep()</TT> is allowed.
+</P>
+
+<P>
+The primary problem you have to solve is coordinating all the cell
+threads during each generation.
+A cell thread cannot start computing the new cell value for the
+next generation until all other cells have
+completed the computation for the current generation.
+Use Java message passing, that is <TT>send</TT>
+and <TT>receive</TT> to solve this problem.
+</P>
+
+<P>
+If you have not already done so for game-of-life,
+animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

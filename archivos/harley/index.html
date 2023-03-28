@@ -1,0 +1,190 @@
+<HTML>
+<HEAD>
+<TITLE>Concurrent Programming Using the Java Language</TITLE>
+<LINK REV="OWNER" HREF="mailto:shartley@mcs.drexel.edu">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" ALINK="#FF0000" VLINK="#000080">
+
+<H1>Concurrent Programming Using Java</H1>
+
+<P>
+The material shown here is covered in much more detail in
+the (forthcoming) book,
+<A HREF="bookInfo.html">
+<I>Concurrent Programming: The Java Programming Language</I></A>,
+(to be) published by
+<A HREF="http://www.oup-usa.org">Oxford University Press</A>
+in February 1998.
+</P>
+
+<P>
+Users of the book can access the book's source code keyed by ``Program/Class''
+number and ``Library Class'' number <A HREF="bookJavaExamples.html">here</A>.
+</P>
+
+<H2>Table of Contents</H2>
+
+<P>
+<A HREF="#INTRO">Introduction</A>                               <BR>
+<P>
+<A HREF="sequential.html#SEQUE">Sequential Example Programs</A> <BR>
+<OL>
+<A HREF="sequential.html#SIMGA">A Simple Genetic Algorithm</A>  <BR>
+<A HREF="sequential.html#ALGAN">Xtango Algorithm Animation</A>  <BR>
+</OL>
+<A HREF="threads.html#THREA">Threads</A>                        <BR>
+<P>
+<A HREF="semaphores.html#SEMAP">Semaphores</A>                  <BR>
+<P>
+<A HREF="monitors.html#MONIT">Monitors</A>                      <BR>
+<OL>
+<A HREF="monitors.html#JAVAM">Java Monitors</A>                 <BR>
+</OL>
+<A HREF="messaging.html#MESSA">Message Passing</A>              <BR>
+<OL>
+<A HREF="messaging.html#MESSC"><TT>Synchronization</TT> Package Classes</A> <BR>
+<A HREF="messaging.html#MESSE">Example Programs</A>             <BR>
+</OL>
+<A HREF="messaging.html#RENDZ">Rendezvous</A>                   <BR>
+<OL>
+<A HREF="messaging.html#RENDC"><TT>Synchronization</TT> Package Classes</A> <BR>
+<A HREF="messaging.html#RENDE">Example Programs</A>             <BR>
+<A HREF="messaging.html#CREND">Conditional Rendezvous</A>       <BR>
+</OL>
+<A HREF="messaging.html#SURMI">Remote Method Invocation</A>     <BR>
+<P>
+<A HREF="parallel.html#PARAP">Parallel Processing</A>           <BR>
+<OL>
+<A HREF="parallel.html#PARAC"><TT>Synchronization</TT> Package Classes</A> <BR>
+<A HREF="parallel.html#PARAE">Example Programs</A>              <BR>
+</OL>
+<A HREF="Applets/index.html">Applet demos of the Xtango Animator</A>  <BR>
+<P>
+<A HREF="labs.html">Laboratory Programming Exercises</A>  <BR>
+</P>
+
+<A NAME="INTRO"><H2>Introduction</H2></A>
+
+<P>
+This is an introduction to using the
+<A HREF="http://www.javasoft.com">Java</A>
+programming language in concurrent or multithreaded applications.
+The context is the process synchronization material
+and related concurrent programming in operating systems courses
+as opposed to software engineering.
+Topics covered are race conditions when threads share data,
+critical sections, mutual exclusion, semaphores, monitors,
+message passing, the rendezvous, remote procedure calls,
+distributed or network programming, and parallel processing.
+Solutions to the classical problems talked about in operating systems courses
+(the dining philosophers, the bounded buffer producers and consumers,
+and the database readers and writers)
+are shown in Java.
+Also shown is how to animate algorithms using the command set of the
+<A HREF="http://www.cc.gatech.edu/gvu/softviz/algoanim/xtango.html">
+Xtango</A> animation interpreter, <TT>animator</TT>.
+Some of the animation examples can be viewed as applets.
+</P>
+
+<P>
+These example programs were developed and tested using Sun Microsystem's JDK
+version 1.0.2 and 1.1 for Solaris 2.x and Windows 95/NT (1996--97).
+They have been updated to remove all ``deprecated'' methods and constructors.
+The multimachine socket examples use the <TT>readObject()</TT>
+and <TT>writeObject()</TT> methods of the <TT>ObjectInputStream</TT>
+and <TT>ObjectOutPutStream</TT> classes, which are part of the RMI
+(remote method invocation) add-on for JDK 1.0.2 and included with JDK 1.1.
+</P>
+
+<P>
+All of the code examples described and hyperlinked here may be
+<A HREF="ftp://ftp.mcs.drexel.edu/pub/shartley/bookJavaExamples.tar.gz">
+retrieved</A>
+by anonymous <TT>ftp</TT> from site
+<TT>ftp.mcs.drexel.edu</TT> (144.118.40.9) in directory <TT>pub/shartley</TT>
+and file <TT>bookJavaExamples.tar.gz</TT>.
+This is a GNU <TT>gzip</TT>-compressed UNIX <TT>tar</TT> archive file.
+A
+<A HREF="ftp://ftp.mcs.drexel.edu/pub/shartley/bookJavaExamples.zip">
+<TT>zip</TT></A>
+archive version is also available there.
+You may also download them directly without using anonymous <TT>ftp</TT>:
+<A HREF ="bookJavaExamples.tar.gz"><TT>gzip</TT> <TT>tar</TT> archive</A>
+and
+<A HREF ="bookJavaExamples.zip"><TT>zip</TT> archive</A>.
+</P>
+
+<P>
+Java is designed to be a platform-independent language,
+so all of these examples, including the animated ones,
+will run without change on Sun's Solaris 2.x UNIX for Sparc and
+Microsoft Windows 95/NT for Intel-based PCs.
+</P>
+
+<P>
+In these compressed archives,
+there is a directory <TT>lib</TT> that contains three subdirectories:
+<TT>Utilities</TT>, <TT>Synchronization</TT>, and <TT>XtangoAnimation</TT>.
+The path to the <TT>lib</TT> directory needs to be put into your
+<TT>CLASSPATH</TT> environment variable so that your Java programs can
+import the classes in the subdirectories of <TT>lib</TT>.
+For example, suppose you unpack the archive so that <TT>lib</TT> is
+in directory <TT>/home/you/Java</TT>.
+Then on a UNIX system, put the line
+<OL>
+<PRE>
+setenv CLASSPATH /usr/local/JDK/lib/classes.zip:/home/you/Java/lib:.
+</PRE>
+</OL>
+into your <TT>.cshrc</TT> or <TT>.login</TT> file.
+(Replace <TT>/usr/local/JDK/lib/classes.zip</TT> with wherever your system
+administrator has installed the Java system classes.)
+</P>
+
+<P>
+On a Windows 95/NT system, put the line
+<OL>
+<PRE>
+SET CLASSPATH=C:\JAVA\JDK\LIB\CLASSES.ZIP;D:\LIB;.
+</PRE>
+</OL>
+in your <TT>AUTOEXEC.BAT</TT> file (assuming you put <TT>lib</TT>
+into <TT>D:</TT> and the JDK into <TT>C:\JAVA</TT>).
+</P>
+
+<P>
+To test your <TT>CLASSPATH</TT> setting, try these commands.
+<OL>
+<PRE>
+java Utilities.GetOpt
+java XtangoAnimation.XtangoAnimator
+</PRE>
+</OL>
+These execute the <TT>main()</TT> methods in those classes,
+which have been included for testing the classes.
+You should not get a ``class not found'' error message.
+</P>
+
+<HR>
+
+<P>
+<SCRIPT LANGUAGE="JavaScript">
+<!--hide from non-JavaScript browsers
+   document.write("Last modified on "+document.lastModified);
+ // end hiding -->
+</SCRIPT>
+</P>
+
+<P>
+<EM>&#169 1997 Stephen J. Hartley<EM>
+</P>
+
+<P>
+<ADDRESS><A HREF="http://www.mcs.drexel.edu/~shartley">SJH</A></ADDRESS>
+<ADDRESS>
+<A HREF="mailto:shartley@mcs.drexel.edu">shartley@mcs.drexel.edu</A>
+</ADDRESS>
+</P>
+</BODY>
+</HTML>

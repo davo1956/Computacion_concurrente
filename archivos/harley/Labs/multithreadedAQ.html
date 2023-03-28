@@ -1,0 +1,133 @@
+<HTML>
+<HEAD>
+<TITLE>Multithreaded Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Multithreaded Adaptive Quadrature</H1>
+
+<P>
+Remember how this algorithm works.
+We approximate the area under the curve with a trapezoid.
+Then we decide whether or not to accept this approximation
+by calculating the areas of the two smaller trapezoids
+formed using the midpoint.
+If their sum is close enough to the original trapezoid,
+we accept the original trapezoid as an approximation to
+the area under the curve.
+If the sum is not close enough, then we take each of the
+two smaller trapezoids and apply the above algorithm recursively
+to each.
+Start a new thread each time the algorithm is called recursively.
+See the skeleton code below.
+</P>
+
+<H2>Input Data</H2>
+
+<P>
+The input data consists of three <TT>double</TT> numbers:
+<I>a</I>, <I>b</I>, and <I>epsilon</I>.
+The function to integrate is defined in a separate class.
+You may parse these three numbers from the command line
+or read them from the keyboard or a file.
+</P>
+
+<P>
+Try your program on these functions (<I>epsilon</I> of 0.0001):
+<I>sin(x)</I> from 0.1 to 1.0,
+<I>tan(x)</I> from 0.1 to 1.0,
+<I>x**2</I> from 0.1 to 1.0,
+<I>sqrt(x)</I> from 0.1 to 1.0,
+and
+<I>-log(x)</I> from 0.1 to 1.0 (note this is the negative of the logrithm).
+<B>Include these examples</B> in your submitted sample output.
+</P>
+
+<P>
+This algorithm coded in Java might not work well from 0.0 to <I>b</I>
+on some functions whose value at 0.0 is 0.0,
+so that is why 0.1 is used above.
+Since this is just a warm-up exercise and not a numerical methods class,
+we will not worry about this.
+</P>
+
+<H2>Program Skeleton</H2>
+
+<P>
+<PRE>
+interface TheFunction {
+   public double evaluate(double x);
+}
+
+class MyFunction implements TheFunction {
+   public double evaluate(double x) { return x*x; }
+}
+
+class Sine implements TheFunction {
+   public double evaluate(double x) { return Math.sin(x); }
+}
+
+class Tangent implements TheFunction {
+   public double evaluate(double x) { return Math.tan(x); }
+}
+
+class AdaptiveQuad {
+
+   public static void main(String[] args) {
+      double a = (Double.valueOf(args[0])).doubleValue();
+      double b = (Double.valueOf(args[1])).doubleValue();
+      double epsilon = (Double.valueOf(args[2])).doubleValue();
+      TheFunction fn;
+      double result;
+      ...
+      fn = (TheFunction) new MyFunction();
+      Area area = new Area(a, b, epsilon, fn);
+      area.start();
+      try { area.join(); } catch (InterruptedException e) {}
+      result = area.getResult();
+      ...
+      fn = (TheFunction) new Sine();
+      ...
+      fn = (TheFunction) new Tangent();
+      ...
+   }
+}
+
+class Area extends Thread {
+   private double p, q, epsilon, result;
+   private TheFunction f;
+
+   public Area(double a, double b, double eps, TheFunction fn) { ... }
+
+   public double getResult() { return result; }
+
+   public void run() {
+
+      if ... // the area in trapezoid [p,q] is close to the sum of the
+         ... // areas in trapezoids [p,(p+q)/2] and [(p+q)/2,q];
+         ... // use relative error to determine how close, that is,
+         ... // x and y are close if abs((y-x)/x) &lt; epsilon
+         ... // to avoid dividing by zero, use abs(y-x) &lt;= epsilon*x
+
+         result = ... // the area of trapezoid [p,q]
+
+       else {
+          ... new Area(p, (p+q)/2, epsilon, f);
+          ... // start a new thread
+          ... new Area((p+q)/2, q, epsilon, f);
+          ... // start a new thread
+          result = ... // call getResult() twice
+       }
+   }
+}
+</PRE>
+</P>
+
+<P>
+Animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

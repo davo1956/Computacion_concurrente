@@ -1,0 +1,73 @@
+The GA parameters are:
+  populationSize      = 100
+  numXoverPoints      = 1
+  crossoverRate       = 0.7
+  mutationRate        = 0.01
+  doElitism           = true
+  printPerGens        = 100
+  maxGenerations      = 1000
+  Debug.flag          = false
+  logFileName         = bigbit.txt
+BitCountChromosome: chromosome length is 100
+GA: chromosome length = 100
+GA: mainLoop
+Known solution fitness is 1.0
+Initial population: generation=0 best value=0.3969 avg=0.25497999999999993 stddev=0.049607636264567
+most fit (previous generation=0):
+   1001110000110001011011101001111011010001011110111101001101011110000101111111101111011011110111100111
+   this chromosome has 63 bits set
+    fitness= 0.3969
+number of crossovers and mutations: 0 and 0
+Report: generation=100 best value=0.7744 avg=0.608697 stddev=0.05850025892198628
+most fit (previous generation=99):
+   1111111111011101010111111011111101111111111111111111111111111101111101111111011101101111111111111011
+   this chromosome has 88 bits set
+    fitness= 0.7744
+number of crossovers and mutations: 3468 and 10008
+Report: generation=200 best value=0.8649 avg=0.6447459999999998 stddev=0.06424380710632917
+most fit (previous generation=177):
+   1111111111011101111111111111111101111111111111111111111111111111111101111111011011111111111111111011
+   this chromosome has 93 bits set
+    fitness= 0.8649
+number of crossovers and mutations: 6937 and 19961
+Report: generation=300 best value=0.9409 avg=0.7264880000000004 stddev=0.07583501400734464
+most fit (previous generation=284):
+   1111111101110111111111111111111111111111111111111111111111111111111111111111111011111111111111111111
+   this chromosome has 97 bits set
+    fitness= 0.9409
+number of crossovers and mutations: 10386 and 29973
+Report: generation=400 best value=0.9604 avg=0.7393870000000001 stddev=0.07223844726761462
+most fit (previous generation=342):
+   1111111111110111111111111111111111111111111111111111111111111111111111111111111011111111111111111111
+   this chromosome has 98 bits set
+    fitness= 0.9604
+number of crossovers and mutations: 13850 and 39947
+Report: generation=500 best value=0.9604 avg=0.7125709999999998 stddev=0.06498700304404326
+most fit (previous generation=342):
+   1111111111110111111111111111111111111111111111111111111111111111111111111111111011111111111111111111
+   this chromosome has 98 bits set
+    fitness= 0.9604
+number of crossovers and mutations: 17306 and 49936
+Report: generation=600 best value=0.9604 avg=0.7084749999999999 stddev=0.07106370648078933
+most fit (previous generation=342):
+   1111111111110111111111111111111111111111111111111111111111111111111111111111111011111111111111111111
+   this chromosome has 98 bits set
+    fitness= 0.9604
+number of crossovers and mutations: 20774 and 59948
+Report: generation=700 best value=0.9801 avg=0.719862 stddev=0.10159379979888536
+most fit (previous generation=638):
+   1111111111110111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+   this chromosome has 99 bits set
+    fitness= 0.9801
+number of crossovers and mutations: 24245 and 70078
+Report: generation=800 best value=0.9801 avg=0.7444210000000001 stddev=0.06856235721787991
+most fit (previous generation=638):
+   1111111111110111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+   this chromosome has 99 bits set
+    fitness= 0.9801
+number of crossovers and mutations: 27720 and 80033
+Simulation completed in 816 generations and 181.978 seconds
+Best member (generation=816):
+   1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+   this chromosome has 100 bits set
+    fitness= 1.0

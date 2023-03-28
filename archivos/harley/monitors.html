@@ -1,0 +1,387 @@
+<HTML>
+<HEAD>
+<TITLE>Concurrent Programming Using the Java Language</TITLE>
+<LINK REV="OWNER" HREF="mailto:shartley@mcs.drexel.edu">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" ALINK="#FF0000" VLINK="#000080">
+
+<A NAME="MONIT"><H2>Monitors</H2>
+
+<P>
+Semaphores are like goto's and pointers: mistake prone, work okay but
+lack structure and ``discipline''.
+</P>
+
+<P>
+For example, a disastrous typo:
+<P>
+<OL>
+V(S); criticalSection(); V(S)
+</OL>
+</P>
+
+<P>
+This leads to deadlock:
+<P>
+<OL>
+P(S); criticalSection(); P(S)
+</OL>
+</P>
+
+<P>
+Nested critical sections can lead to deadlock:
+<P>
+<OL>
+P1: P(Q); P(S); ... V(S); V(Q);
+<P>
+P2: P(S); P(Q); ... V(Q); V(S);
+</OL>
+</P>
+
+<P>
+A <I>monitor</I> is an object with some built-in mutual exclusion and
+thread synchronization capabilities.
+They are an integral part of the programming language so the compiler can
+generate the correct code to implement the monitor.
+Only one thread can be active at a time in the monitor,
+where ``active'' means executing a method of the monitor.
+Monitors also have <I>condition variables</I>,
+on which a thread can <I>wait</I> if conditions are not right for it
+to continue executing in the monitor.
+Some other thread can then get in the monitor and perhaps change the
+state of the monitor.
+If conditions are now right, that thread can <I>signal</I> a waiting
+thread, moving the latter to the ready queue to get back into the monitor
+when it becomes free.
+<P>
+<OL>
+<IMG SRC="Monitors/mqus.gif">
+</OL>
+</P>
+
+<P>
+Monitors can use either <I>signal-and-exit</I> or <I>signal-and-continue</I>
+signaling discipline.
+In the former, a signaling thread must leave the monitor immediately,
+at which point it is guaranteed that the signaled thread is the next one
+in the monitor.
+In the latter, the signaled thread is not guaranteed to be the next
+one in the monitor.
+In fact, <I>barging</I> can take place:
+some thread that has called a monitor method and is blocked until the
+monitor is free can get into the monitor before a signaled thread.
+</P>
+
+<P>
+Here are monitors for the three ``classical'' problems using the
+signal-and-exit signaling discipline and condition variables.
+They are written in a Java-like <B>but not Java</B> pseudocode.
+The <TT>synchronized</TT> attribute in a method definition means
+that only one thread at a time can be active in any <TT>synchronized</TT>
+method.
+<P>
+<OL>
+<A HREF="Monitors/bbse.java">Bounded Buffer Pseudocode Monitor.</A>
+</OL>
+</P>
+
+<P>
+Philosopher starvation is prevented by introducing a new state: very hungry.
+A philosopher is put into this state if it is hungry, if one of its
+neighbors puts down its forks, and if it cannot eat because the
+other fork is in use.
+A new rule is added: a hungry philosopher cannot eat if it has
+a very hungry neighbor.
+These changes prevent a collaboration of two philosophers
+trying to starve the philosopher between them.
+Notice that signal-and-exit requires leaving and reentering
+the monitor to generate more than one signal.
+<P>
+<OL>
+<A HREF="Monitors/dpse.java">Starvation-Free Dining Philosophers Pseudocode Monitor.</A>
+</OL>
+</P>
+
+<P>
+Writer starvation is prevented by requiring readers that come along to read
+the database to wait if there is a waiting writer even if other readers
+are currently reading the database.
+When the current readers finish, the waiting writer writes the database
+and then signals into the database a waiting reader.
+Each entering reader signals another waiting reader into the database.
+<P>
+<OL>
+<A HREF="Monitors/rwse.java">Starvation-Free Readers and Writers Pseudocode Monitor.</A>
+</OL>
+</P>
+
+<A NAME="JAVAM"><H3>Java Monitors</H3>
+
+<P>
+Java uses the <TT>synchronized</TT> keyword to indicate that only
+one thread at a time can be executing in this or any other
+<TT>synchronized</TT> method of the object representing the monitor.
+A thread can call <TT>wait()</TT> to block and leave the monitor until
+a <TT>notify()</TT> or <TT>notifyAll()</TT> places the thread back
+in the ready queue to resume execution inside the monitor when scheduled.
+A thread that has been sent a signal is <B>not</B> guaranteed to be
+the next thread executing inside the monitor
+compared to one that is blocked on a call to one of the monitor's
+<TT>synchronized</TT> methods.
+Also, it is <B>not</B> guaranteed that the thread that has been waiting
+the longest is the one woken up with a <TT>notify()</TT>;
+an arbitrary thead is chosen by the JVM.
+Finally, when a <TT>notifyAll()</TT> is called to move all waiting threads
+back into the ready queue, the first thread to get back into the
+monitor is <B>not</B> necessarily the one that has been waiting the
+longest.
+</P>
+
+<P>
+Each Java monitor has a single nameless anonymous condition variable
+on which a thread can <TT>wait()</TT> or signal one waiting thread
+with <TT>notify()</TT> or signal all waiting threads with
+<TT>notifyAll()</TT>.
+This nameless condition variable corresponds to a lock on the object
+that must be obtained whenever a thread calls a <TT>synchronized</TT>
+method in the object.
+Only inside a <TT>synchronized</TT> method may <TT>wait()</TT>,
+<TT>notify()</TT>, and <TT>notifyAll()</TT> be called.
+</P>
+
+<P>
+Methods that are <TT>static</TT> can also be <TT>synchronized</TT>.
+There is a lock associated with the class that must be obtained
+when a <TT>static</TT> <TT>synchronized</TT> method is called.
+</P>
+
+<P>
+Usually all the publicly accessible methods, the service or access methods,
+are <TT>synchronized</TT>.
+But a Java monitor may be designed with some methods <TT>synchronized</TT>
+and some not.
+The non-<TT>synchronized</TT> methods may form the <TT>public</TT>
+access and call the <TT>synchronized</TT> methods,
+which are <TT>private</TT>.
+</P>
+
+<P>
+An experiment was performed to determine if Java monitors are signal-and-exit
+or signal-and-continue.
+They use signal-and-continue.
+When a thread executes a <TT>notify()</TT>,
+Java does not necessarily move to the ready queue the thread that has
+been waiting the longest.
+Also, Java allows barging.
+<P>
+<OL>
+<A HREF="Monitors/sigd.java">Java Monitors Use Signal-and-Continue.</A>
+</OL>
+</P>
+
+<P>
+Here are Java monitors for the three ``classical'' problems.
+Two important things to be aware of because of signal-and-continue,
+the lack of named condition variables, and barging.
+Most of the time it is necessary to use a <TT>while</TT> loop
+instead of an <TT>if</TT> when doing a <TT>wait()</TT>.
+<OL>
+<PRE>
+while (condition) try {wait();} catch (InterruptedException e) {}
+</PRE>
+</OL>
+It is possible that some other thread barged in and got the resource
+or whatever, requiring a recheck of the waiting condition.
+Most of the time it is necessary to use <TT>notifyAll()</TT>
+instead of <TT>notify()</TT> in order to awaken all waiting threads
+and let them recheck their waiting condition.
+It is not possible to direct a signal to the particular thread for whom
+the resource is now available or whatever.
+</P>
+
+<P>
+The bounded buffer monitor can only be used by a single producer thread
+and a single consumer thread.
+The ``driver'' code is the same as that for the semaphore single-producer
+single-consumer bounded buffer.
+What could go wrong if more than one thread of each type used this monitor?
+How would you fix the monitor?
+<P>
+<OL>
+<A HREF="Monitors/bbmo.java">The Bounded Buffer Monitor.</A>
+<P>
+<A HREF="Monitors/bbpc.java">The Producer and Consumer Driver.</A>
+</OL>
+</P>
+
+<P>
+Notice how inefficient the dining philosophers monitor is because
+a broadcast signal with <TT>notifyAll()</TT> must be sent whenever
+any philosopher puts down its forks due to Java's lack of named condition
+variables.
+<P>
+<OL>
+<A HREF="Monitors/dpmo.java">A Starvation-Free Dining Philosophers Monitor.</A>
+<P>
+<A HREF="Monitors/dpdr.java">The Dining Philosophers Driver.</A>
+</OL>
+</P>
+
+<P>
+Since there are no named condition variables, another technique must
+be used to prevent starvation in the database readers and writers.
+The arrival times of readers forced to wait because of a
+waiting writer is maintained.
+When the waiting writer enters and then exits the database,
+all waiting readers that arrived <B>before</B> the time the writer just
+exiting finished writing are allowed to read the database.
+<P>
+<OL>
+<A HREF="Monitors/rwmo.java">A Starvation-Free Readers and Writers Monitor.</A>
+<P>
+<A HREF="Monitors/rwdr.java">The Readers and Writers Driver.</A>
+</OL>
+</P>
+
+<P>
+As mentioned, Java does not have semaphores.
+Here is how they are implemented in the <TT>Synchronization</TT> package
+in the <TT>lib</TT> directory.
+<P>
+<OL>
+<A HREF="lib/Synchronization/Semaphore.java">Base Semaphore Class.</A>
+<P>
+<A HREF="lib/Synchronization/WouldBlockException.java">
+An Exception.</A>
+<P>
+<A HREF="lib/Synchronization/BinarySemaphore.java">Binary Semaphore Monitor.</A>
+<P>
+<A HREF="lib/Synchronization/CountingSemaphore.java">Counting Semaphore Monitor.</A>
+</OL>
+</P>
+
+<P>
+A binary semaphore can be implemented in other ways than the above,
+<A HREF="Exercises/b2sm.java">for example</A>.
+Compare and contrast the two implementations.
+Which do you prefer?
+</P>
+
+<P>
+A <I>lock</I> acts like a binary semaphore except only the locking thread can
+unlock the lock.
+<P>
+<OL>
+<A HREF="Monitors/lock.java">Lock Example.</A>
+</OL>
+</P>
+
+<P>
+It is possible to use an object somewhat like a condition variable
+in a Java monitor.
+We can pull the code for the <TT>elements</TT> and <TT>spaces</TT>
+semaphores of the bounded buffer semaphore version
+into the bounded buffer implementation.
+The resulting bounded buffer can be used with multiple producer and
+multiple consumer threads.
+<P>
+<OL>
+<A HREF="Monitors/bbcv.java">Multiple Producer and Consumer Bounded Buffer.</A>
+<P>
+<A HREF="Monitors/bbml.java">The Producers and Consumers Driver.</A>
+</OL>
+</P>
+
+<P>
+A <I>notification</I> technique
+can be used to avoid waking up all the philosopher threads
+with a <TT>notifyAll()</TT>.
+An array of notification objects, <TT>convey</TT>, is used,
+one for each philosopher.
+If the forks are not available when the philosopher gets hungry,
+it waits inside its notification object for a <TT>notify()</TT>.
+<P>
+<OL>
+<A HREF="Monitors/dpcv.java">Dining Philosophers Notification.</A>
+<P>
+<A HREF="Monitors/dpdr.java">The Dining Philosophers Driver.</A>
+</OL>
+</P>
+
+<P>
+The following implements a starvation-free synchronization algorithm
+for the readers and writers with a notification object for
+each thread to wait inside until it can access the database.
+<P>
+<OL>
+<A HREF="Monitors/rwcv.java">Readers and Writers Notification.</A>
+<P>
+<A HREF="Monitors/rwdr.java">The Readers and Writers Driver.</A>
+</OL>
+</P>
+
+<P>
+In contrast to named condition variables,
+it is not possible with this notification technique to wait in the middle
+of a monitor service method for a signal and then continue executing
+inside the monitor service method at that point after receiving the signal.
+The signaled thread has to reenter the monitor via a service method.
+</P>
+
+<P>
+A skeleton class for implementing named condition variables
+(exercise for the reader):
+<P>
+<OL>
+<A HREF="lib/Synchronization/ConditionVariable.java">Named Condition Variable.</A>
+</OL>
+</P>
+
+<P>
+Here is the code for the
+<A HREF="lib/XtangoAnimation/XtangoAnimator.java">
+<TT>XtangoAnimator</TT> Class.</A>
+</P>
+
+<H3>Laboratory Exercises</H3>
+
+<P>
+<OL>
+<LI>Write a Java monitor for the baboons crossing a canyon (unisex bathroom)
+    that is fair, that is, prevents starvation.
+<LI><A HREF="Labs/wxyzMON.html">Printing W, X, Y, and Z</A>
+<LI><A HREF="Labs/smokersMON.html">Cigarette Smokers</A>
+<LI>Write a Java monitor for the single sleeping barber.
+    Then modify it for
+    <A HREF="Labs/sleepingBarbersMON.html">multiple sleeping barbers</A>.
+<LI><A HREF="Labs/baboonsNoStarveMon.html">Baboons without Starvation</A>
+<LI><A HREF="Labs/multiRiderCarsMon.html">Multirider Bumper Cars</A>
+<LI><A HREF="Labs/santa.html">Santa, Reindeer, and Elves</A>
+<LI>Enhance the <A HREF="lib/XtangoAnimation/XtangoAnimator.java">
+    <TT>XtangoAnimator</TT></A> class so that there are commands for
+    rotation, GIF image icons, grouping icons, lines with arrow heads,
+    hiding, and unhiding icons.
+<LI>Find all remaining race conditions, if any, in the <TT>XtangoAnimator</TT>
+    class.
+</OL>
+</P>
+
+<HR>
+
+<P>
+Last modified 30 December 1997.
+</P>
+
+<P>
+<EM>&#169 1997 Stephen J. Hartley<EM>
+</P>
+
+<P>
+<ADDRESS><A HREF="http://www.mcs.drexel.edu/~shartley">SJH</A></ADDRESS>
+<ADDRESS>
+<A HREF="mailto:shartley@mcs.drexel.edu">shartley@mcs.drexel.edu</A>
+</ADDRESS>
+</P>
+</BODY>
+</HTML>

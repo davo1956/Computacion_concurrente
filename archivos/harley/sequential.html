@@ -1,0 +1,269 @@
+<HTML>
+<HEAD>
+<TITLE>Concurrent Programming Using the Java Language</TITLE>
+<LINK REV="OWNER" HREF="mailto:shartley@mcs.drexel.edu">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" ALINK="#FF0000" VLINK="#000080">
+
+<A NAME="SEQUE"><H2>Sequential Example Programs</H2>
+
+<P>
+These examples illustrate some of the sequential features of the language.
+An on-line
+<A HREF="http://www.javasoft.com/doc/tutorial.html">tutorial</A>
+is available from Sun Microsystems for a more detailed discussion
+of the syntax and semantics of the Java language.
+A <A HREF="http://sunsite.unc.edu/javafaq/javafaq.html">basic FAQ</A>
+(Frequently Asked Questions) and
+a <A HREF="http://www.best.com/~pvdl/javafaq.html">programmer's FAQ</A>
+are also available.
+</P>
+
+<P>
+These three examples show how to write a single-class program containing
+one or more <TT>static</TT> procedures or functions
+and a <TT>main()</TT> method where execution of the program begins.
+<P>
+<OL>
+<A HREF="Sequential/fact.java">Compute Factorials.</A>
+<P>
+<A HREF="Sequential/sort.java">Sort Numbers.</A>
+<P>
+<A HREF="Sequential/nque.java">N-Queens Problem.</A>
+</OL>
+</P>
+
+<P>
+This example shows how to access a <TT>static</TT> method defined
+in another class.
+<P>
+<OL>
+<A HREF="Sequential/fct2.java">Two Class Factorial Program.</A>
+</OL>
+</P>
+
+<P>
+This example shows how to read numbers and words (strings) from the
+keyboard (or <TT>stdin</TT> in UNIX terminology).
+<P>
+<OL>
+<A HREF="Sequential/tokn.java">Tokenizing Keyboard Input.</A>
+</OL>
+</P>
+
+<P>
+This example shows how to open a file and write binary floating-point numbers
+(not translated into ASCII) to the file.
+The numbers are read from the keyboard with a tokenizer as in the
+previous example.
+Then the file is read and the numbers printed out.
+The file is deleted in the <TT>finally</TT> block
+whether or not there is an IO error.
+<P>
+<OL>
+<A HREF="Sequential/file.java">Writing and Reading a Data File.</A>
+</OL>
+</P>
+
+<P>
+This next example shows how to read and parse a
+text file containing some input data in a specific format.
+<P>
+<OL>
+<A HREF="Sequential/name.java">Tokenizing File Input.</A>
+<P>
+<A HREF="Sequential/input.txt">The Input File.</A>
+</OL>
+</P>
+
+<P>
+This example shows how to create objects from user-defined classes.
+<P>
+<OL>
+<A HREF="Sequential/bank.java">Neighborhood Banking.</A>
+</OL>
+</P>
+
+<P>
+The <TT>GetOpt</TT> class can be used to process command line
+arguments when a Java program is run, like the following
+<OL>
+<PRE>
+javac aClass.java
+java aClass -a -f theFile -w -80 -h3.33 arg1 arg2
+</PRE>
+</OL>
+<P>
+<OL>
+<A HREF="lib/Utilities/GetOpt.java">Class <TT>GetOpt</TT> Helps Parse Command Line Options.</A>
+</OL>
+</P>
+
+<P>
+This last example shows how to subclass the <TT>Bank</TT>
+and <TT>Account</TT> example.
+<P>
+<OL>
+<A HREF="Sequential/cbnk.java">Commercial Banking.</A>
+</OL>
+</P>
+
+<A NAME="SIMGA"><H3>A Simple Genetic Algorithm</H3>
+
+<P>
+A <I>genetic algorithm</I> is an optimization technique that uses
+randomization instead of a deterministic search strategy.
+To maximize <I>f(x)</I> over some domain,
+the values of <I>x</I> in the domain are encoded in
+strings over some alphabet, usually {0,1}.
+A population of such strings, called <I>chromosomes</I>, is created at random.
+Then the genetic operators <I>selection</I> for reproduction,
+<I>crossover</I>, and <I>mutation</I> are applied to the population members.
+Selection is based on the <I>fitness</I> value of the chromosome,
+usually <I>f(x)</I>.
+After this is repeated many times, the population contains
+mostly highly fit chromosomes, one of which (it is hoped) is
+close to the maximum value of the function <I>f(x)</I> over the domain.
+</P>
+
+<P>
+This example shows how to split a program up into <I>packages</I>.
+The <TT>Chromosome</TT> class is defined as a hierarchy of
+subclasses for each gene data type.
+<P>
+<OL>
+<A HREF="GA/README.TXT">README</A> file.
+<P>
+<A HREF="GA/Simple/sGA.java">sGA.java</A>
+<P>
+<A HREF="GA/Simple/GAutilities/Debug.java">Debug.java</A>
+<P>
+<A HREF="GA/Simple/GAutilities/Defaults.java">Defaults.java</A>
+<P>
+<A HREF="GA/Simple/GAutilities/Globals.java">Globals.java</A>
+<P>
+<A HREF="GA/Simple/GAutilities/MyRandom.java">MyRandom.java</A>
+<P>
+<A HREF="GA/Simple/GAutilities/ShellSort.java">ShellSort.java</A>
+<P>
+<A HREF="GA/Simple/Chromosomes/Chromosome.java">Chromosome.java</A>
+<P>
+<A HREF="GA/Simple/Chromosomes/BitChromosome.java">BitChromosome.java</A>
+<P>
+<A HREF="GA/Simple/Chromosomes/DoubleChromosome.java">DoubleChromosome.java</A>
+<P>
+<A HREF="GA/Simple/Chromosomes/BitCountChromosome.java">BitCountChromosome.java</A>
+<P>
+<A HREF="GA/Simple/Chromosomes/ByteCountChromosome.java">ByteCountChromosome.java</A>
+<P>
+<A HREF="GA/Simple/Chromosomes/SinesChromosome.java">SinesChromosome.java</A>
+<P>
+<A HREF="GA/Simple/Chromosomes/XtoTenthChromosome.java">XtoTenthChromosome.java</A>
+<P>
+<A HREF="GA/Simple/Chromosomes/MyChromosome.java">MyChromosome.java</A>
+<P>
+<A HREF="GA/Simple/Crossovers/Crossover.java">Crossover.java</A>
+<P>
+<A HREF="GA/Simple/Crossovers/OnePointCrossover.java">OnePointCrossover.java</A>
+<P>
+<A HREF="GA/Simple/Crossovers/UniformCrossover.java">UniformCrossover.java</A>
+<P>
+<A HREF="GA/Simple/Crossovers/NPointCrossover.java">NPointCrossover.java</A>
+<P>
+<A HREF="GA/Simple/Selections/SelectionException.java">SelectionException.java</A>
+<P>
+<A HREF="GA/Simple/Selections/FitnessSumZeroException.java">FitnessSumZeroException.java</A>
+<P>
+<A HREF="GA/Simple/Selections/Selection.java">Selection.java</A>
+<P>
+<A HREF="GA/Simple/Selections/ProportionalSelection.java">ProportionalSelection.java</A>
+</OL>
+</P>
+
+<A NAME="ALGAN"><H3>Algorithm Animation</H3>
+
+<P>
+The <TT>XtangoAnimator</TT> class in the <TT>XtangoAnimation</TT>
+directory of the <TT>lib</TT> directory
+contains a collection of methods
+that implement the command set of the
+<A HREF="http://www.cc.gatech.edu/gvu/softviz/algoanim/xtango.html">Xtango</A>
+algorithm animation interpreter, <TT>animator</TT>.
+A Java program can create an instance of <TT>XtangoAnimator</TT> and
+call its methods to create graphical icons of various colors in a window
+and then move them around.
+</P>
+
+<P>
+The <TT>XtangoAnimator</TT> class
+is designed to be used in a stand-alone application for
+algorithm animation.
+In contrast, the Xtango <TT>animator</TT> program reads commands from
+a text file or UNIX pipe and interprets them.
+A group at Duke University has implemented a
+<A HREF="http://www.cc.gatech.edu/gvu/softviz/algoanim/samba.html">Samba</A>
+interpreter, called
+<A HREF="http://www.cs.duke.edu/~trevor/drool/lambada.html">lambada</A>.
+Samba is a superset of Xtango.
+The lambada interpreter also reads a text stream
+of commands from a file or pipe.
+The <TT>XtangoAnimator</TT> class defines methods that
+correspond to the Xtango <TT>animator</TT> commands and that
+can be called in a Java program.
+</P>
+
+<P>
+Here are two example programs.
+<P>
+<OL>
+<A HREF="Animations/ahlw.java">``Hello, world!'' using <TT>XtangoAnimator</TT>.</A>
+<P>
+<A HREF="Animations/asrt.java">Animated Bubble Sorting.</A>
+</OL>
+<P>
+A sorting screen snapshot:
+<P>
+<OL>
+<IMG SRC="Animations/asrt.gif">
+</OL>
+</P>
+
+<H3>Laboratory Exercises</H3>
+
+<P>
+<OL>
+<LI>Write a Java program that generates prime numbers.
+    Try both alternatives for getting input data into the program:
+    command line arguments and keyboard input.
+    Write the program first as one class, then as several classes.
+<LI><A HREF="Labs/adaptQuad.html">Adaptive Quadrature</A>
+<LI><A HREF="Labs/uniTSP.html">Unidirectional TSP</A>
+<LI>Animate the <A HREF="Sequential/nque.java">N-Queens</A> program
+    using the <TT>XtangoAnimator</TT> class.
+<LI>Look up the <A HREF="Labs/golSeq.html">``Game of Life''</A>
+    in <I>Scientific American</I> and
+    write a Java program to simulate it.
+    Is the issue available on the Web?
+    Animate your program.
+</OL>
+</P>
+
+<HR>
+
+<P>
+Last modified 30 December 1997.
+</P>
+
+<P>
+<EM>&#169 1997 Stephen J. Hartley<EM>
+</P>
+
+<P>
+<ADDRESS><A HREF="http://www.mcs.drexel.edu/~shartley">SJH</A></ADDRESS>
+<ADDRESS>
+<A HREF="mailto:shartley@mcs.drexel.edu">shartley@mcs.drexel.edu</A>
+</ADDRESS>
+</P>
+</BODY>
+</HTML>

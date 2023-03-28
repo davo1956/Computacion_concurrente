@@ -1,0 +1,19 @@
+5
+dave laura owen vick amy
+dave 200.00 3
+laura owen vick
+owen 500.00 1
+dave
+amy 150.00 2
+vick owen
+laura 0.00 2
+amy vick
+vick 0.00 0
+3
+liz steve dave
+liz 30.00 1
+steve
+steve 55.00 2
+liz dave
+dave 0.00 2
+steve liz

@@ -1,0 +1,133 @@
+<HTML>
+<HEAD>
+<TITLE>Sequential Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Adaptive Quadrature</H1>
+
+<P>
+Suppose we want to calculate the integral from <I>a</I> to <I>b</I>
+of a continuous function <I>f(x)</I>
+that is non-negative over [<I>a</I>,<I>b</I>].
+As you know from calculus, this is the area under the curve, bounded
+by <I>a</I> and <I>b</I>.
+We will calculate numerically an approximation to the integral,
+rather than using a closed-form solution from Maple.
+The method we will use is called adaptive quadrature.
+</P>
+
+<P>
+The method is based on using the area of the trapezoid bounded by <I>a</I>,
+<I>b</I>, <I>f(a)</I>, and <I>f(b)</I> as an approximation for the area
+under the curve between <I>a</I> and <I>b</I>.
+Before accepting this trapezoidal area as a good approximation,
+we compare the trapezoidal area to the sum of two other trapezoidal areas:
+the trapezoid formed by
+<I>a</I>, <I>(a+b)/2</I>, <I>f(a)</I>, and <I>f((a+b)/2)</I>,
+and the trapezoid formed by
+<I>(a+b)/2</I>, <I>b</I>, <I>f((a+b)/2)</I>, and <I>f(b)</I>.<BR>
+<IMG SRC="adaptQuad.gif" ALT="adaptQuad.gif">
+</P>
+
+<P>
+If the sum of the areas of the two smaller trapezoids is close to the
+area of the larger trapezoid, then we accept the area of the larger
+trapezoid as a good approximation to the area under the curve.
+If on the other hand, the sum is not close, then we repeat the
+algorithm independently on each of the two smaller trapezoids.
+Note this is a recursive algorithm.
+</P>
+
+<H2>Input Data</H2>
+
+<P>
+The input data consists of three <TT>double</TT> numbers:
+<I>a</I>, <I>b</I>, and <I>epsilon</I>.
+The function to integrate is defined in a separate class.
+You may parse these three numbers from the command line
+or read them from the keyboard or a file.
+</P>
+
+<P>
+Try your program on these functions (<I>epsilon</I> of 0.0001):
+<I>sin(x)</I> from 0.1 to 1.0,
+<I>tan(x)</I> from 0.1 to 1.0,
+<I>x**2</I> from 0.1 to 1.0,
+<I>sqrt(x)</I> from 0.1 to 1.0,
+and
+<I>-log(x)</I> from 0.1 to 1.0 (note this is the negative of the logrithm).
+<B>Include these examples</B> in your submitted sample output.
+</P>
+
+<P>
+This algorithm coded in Java might not work well from 0.0 to <I>b</I>
+on some functions whose value at 0.0 is 0.0,
+so that is why 0.1 is used above.
+Since this is just a warm-up exercise and not a numerical methods class,
+we will not worry about this.
+</P>
+
+<H2>Program Skeleton</H2>
+
+<P>
+<PRE>
+interface TheFunction {
+   public double evaluate(double x);
+}
+
+class MyFunction implements TheFunction {
+   public double evaluate(double x) { return x*x; }
+}
+
+class Sine implements TheFunction {
+   public double evaluate(double x) { return Math.sin(x); }
+}
+
+class Tangent implements TheFunction {
+   public double evaluate(double x) { return Math.tan(x); }
+}
+
+class AdaptiveQuad {
+
+   public static void main(String[] args) {
+      double a = (Double.valueOf(args[0])).doubleValue();
+      double b = (Double.valueOf(args[1])).doubleValue();
+      double epsilon = (Double.valueOf(args[2])).doubleValue();
+      ...
+      TheFunction fn = (TheFunction) new MyFunction();
+      double result = area(a, b, epsilon, fn);
+      ...
+      fn = (TheFunction) new Sine();
+      result = area(a, b, epsilon, fn);
+      ...
+      fn = (TheFunction) new Tangent();
+      result = area(a, b, epsilon, fn);
+      ...
+   }
+
+   public static double area(double p, double q, double epsilon, TheFunction f) {
+
+      if ... // the area in trapezoid [p,q] is close to the sum of the
+         ... // areas in trapezoids [p,(p+q)/2] and [(p+q)/2,q];
+         ... // use relative error to determine how close, that is,
+         ... // x and y are close if abs((y-x)/x) &lt; epsilon
+         ... // to avoid dividing by zero, use abs(y-x) &lt;= epsilon*x
+
+         return ... // the area of trapezoid [p,q]
+
+       else return area(p, (p+q)/2, epsilon, f)
+                 + area((p+q)/2, q, epsilon, f);
+   }
+}
+</PRE>
+</P>
+
+<P>
+Animate your program using
+<A HREF="../sequential.html#ALGAN">
+<TT>XtangoAnimator</TT></A>.
+</P>
+
+</BODY>
+</HTML>

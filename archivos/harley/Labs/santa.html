@@ -1,0 +1,99 @@
+<HTML>
+<HEAD>
+<TITLE>Monitor Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Monitor for Santa, His Reindeer, and His Elves</H1>
+
+<!--
+Next time, say there are 20 reindeer of which 9 must trickle out of
+the barn and be hitched to the sleigh for Santa to deliver presents.
+This is more realistic.  Also means when Santa returns from delivering
+there may be 9 fresh reindeer AND 3 elves waiting.
+Because of barging, it is possible even with just 9 reindeer, for Santa
+to unblock from a wait() and see 9 ready reindeer and 3 problem-plagued
+elves: the 3rd elve may do notify() and 9th reindeer barge into monitor
+before Santa.
+-->
+
+<P>
+In this simulation, there is one Santa Claus thread, 20 reindeer threads,
+and 11 elf threads.
+In the beginning, the reindeer threads are in the barn
+and the elf threads are in the toy factory.
+Santa Claus waits in his shop up at the North Pole, and can only
+be unblocked by either
+<UL>
+<LI> nine of the 20 reindeer showing up at Santa's shop from the barn
+     ready to deliver presents, or
+<LI> some group of three elves who are having difficulties
+     assemblying their toys and come to Santa in his shop for help.
+</UL>
+When nine reindeer show up, Santa and his reindeer deliver
+presents (simulated with a <TT>nap()</TT>) around the world for a while.
+When three elves are having their problems solved by Santa in his
+shop, any other elf wishing to visit Santa's shop for help must wait
+outside the shop entrance
+(a) for the three elves currently in the shop to exit the shop,
+and (b) for two other elves to form a group of three to enter the shop
+together for help.
+If Santa awakens to see three elves in his shop for help and
+nine reindeer showing up, the reindeer get priority.
+When Santa and his reindeer return from delivering presents,
+the reindeer return to the heated barn and munch food and warm up
+(simulated with a <TT>nap()</TT>) for a while.
+Santa helps three elves solve toy assembly problems with a <TT>nap()</TT>.
+Elves work individually assemblying a toy in the factory with a <TT>nap()</TT>.
+Each elf periodically needs Santa's help at random times assemblying a toy.
+</P>
+
+<P>
+As in all our programming assignments, use command line arguments
+to set the simulation parameters.
+</P>
+
+<P>
+Remember that Java monitors are `signal and continue' so be sure
+to think about the ramifications of this as you design your monitor,
+in particular ``barging''.
+No semaphores and no busy waiting allowed.
+Do not use <TT>nap()</TT> within a synchronized monitor method.
+</P>
+
+<P>
+For the purposes of this assignment you may assume that each <TT>notify()</TT>
+awakens the thread that has been waiting the longest.
+But it is unpredictable when that thread will get back into the monitor.
+It is possible for other threads that have called a monitor synchronized
+method to ``barge'' in ahead of it.
+Also, <TT>notifyAll()</TT> awakens all the waiting threads and it is
+unpredictable which thread will get back into the monitor first
+and whether another thread will ``barge'' in ahead of it.
+</P>
+
+<P>
+Here is one way to approach a monitor programming assignment.
+Think of the monitor as maintaining the state of the system
+in integer and boolean data fields and the synchronized methods
+as making atomic changes to the state of the system.
+If a thread enters the monitor and needs a resource that is currently
+unavailable or needs to synchronize with another thread, then
+<PRE>
+while (<I>condition</I>) wait();
+</PRE>
+Any time a thread changes a variable that may affect the
+<TT><I>condition</I></TT> some other thread is waiting on,
+do a <TT>notifyAll()</TT> before exiting the method.
+</P>
+
+<P>
+Animate your program using
+<A HREF="../lib/XtangoAnimation/XtangoAnimator.java">
+<TT>XtangoAnimator.java</TT></A>.
+First do the base assignment as specified above and turn it in.
+Then do an animation of it as a separate program.
+</P>
+
+</BODY>
+</HTML>

@@ -1,0 +1,367 @@
+<HTML>
+<HEAD>
+<TITLE>Concurrent Programming Using the Java Language</TITLE>
+<LINK REV="OWNER" HREF="mailto:shartley@mcs.drexel.edu">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" ALINK="#FF0000" VLINK="#000080">
+
+<A NAME="THREA"><H2>Threads</H2>
+
+<P>
+A <I>process</I> is an executing program.
+It has been allocated memory by the operating system.
+A thread is an execution or flow of control
+in the address space of a process;
+the program counter register points to the next instruction to be executed.
+A process is a program with one thread.
+A process can have more than one thread.
+All the threads in a process have their own program counter
+and their own stack for local (also called automatic) variables
+and return addresses of invoked procedures.
+</P>
+
+<P>
+In Java, a thread in the run-time interpreter calls the <TT>main()</TT> method
+of the class on the <TT>java</TT> command line.
+Each object created can have one or more threads,
+all sharing access to the data fields of the object.
+</P>
+
+<P>
+The article
+<A HREF="ftp://gatekeeper.dec.com/pub/DEC/SRC/research-reports/SRC-035.ps.Z">
+<I>An Introduction to Programming with Threads</I></A>
+by Andrew D. Birrell (1989) motivates concurrent programming with threads:
+<UL>
+<LI> shared memory multiprocessors are cheaper and more common so each thread
+     can be allocated a CPU;
+<LI> it is less expensive and more efficient to create several threads in one
+     process that share data than to create several processes that share data;
+<LI> IO on slow devices like networks, terminals, and disks can be done in
+     one thread while another thread does useful computation in parallel;
+<LI> multiple threads can handle the events (e.g., mouse clicks)
+     in multiple windows in the windowing system on a workstation;
+<LI> in a LAN cluster of workstations or in a distributed operating system
+     environment, a server running on one machine can spawn a thread to
+     handle an incoming request in parallel with the main thread continuing
+     to accept additional incoming requests.
+</UL>
+</P>
+
+<P>
+The <TT>MyObject</TT> class contains some methods useful for multithreaded
+simulations:
+<OL>
+<TT>nap(</TT><I>milliseconds</I><TT>)</TT>,             <BR>
+<TT>age()</TT>,                                         <BR>
+<TT>random()</TT>, and                                  <BR>
+<TT>seed(</TT><I>number</I><TT>)</TT>.                  <BR>
+</OL>
+A program can sleep for some number of milliseconds.
+The <TT>age()</TT> method returns, in milliseconds, the elapsed
+time since the program started.
+The random number generator can be seeded and returns a <TT>double</TT>
+in the range zero to one.
+It also contains some ``syntactic sugar'' for use with semaphores,
+described later.
+<P>
+<OL>
+<A HREF="lib/Utilities/MyObject.java">Utility methods in Class <TT>MyObject</TT>.</A>
+</OL>
+</P>
+
+<P>
+This is a skeleton (model or template) for a multithreaded simulation.
+<P>
+<OL>
+<A HREF="Threads/muls.java">A Multiple Thread Simulation.</A>
+</OL>
+</P>
+
+<P>
+In JDK 1.0.2 and 1.1 for Solaris 2.x, Java threads are not time sliced,
+as the following test program, <TT>Beeping</TT>, shows.
+Java threads are time sliced on Windows 95/NT, though.
+The first two sample runs show the difference.
+Use a <TT>Scheduler</TT> object to get pseudo time slicing of threads
+on Sun's Solaris 2.x.
+The third sample run of <TT>Beeping</TT> shows it working on Solaris.
+<P>
+<OL>
+<A HREF="lib/Utilities/Scheduler.java">A Class for Time Slicing Threads.</A>
+<P>
+<A HREF="Threads/beep.java">Testing for Time Sliced Threads.</A>
+</OL>
+</P>
+
+<P>
+This program creates two windows, each a subclass of <TT>Frame</TT>, with
+some buttons to control the thread in each window that computes Fibonacci
+numbers.
+There is another thread in the Java virtual machine that is blocked,
+waiting for events like button clicks in the windows.
+When a button is clicked, the <TT>action()</TT> method is called
+by this thread to process the click.
+Meanwhile, the other two threads can be computing concurrently and displaying
+the Fibonacci numbers in their windows.
+Try coding this as a purely sequential program with only one thread or
+flow of control!
+<P>
+<OL>
+<A HREF="Animations/fibo.java">Fibonacci Numbers and Stop Button.</A>
+</OL>
+<P>
+A screen snapshot:
+<P>
+<OL>
+<IMG SRC="Animations/fibo.gif">
+</OL>
+</P>
+
+<P>
+This example shows how to send the output of each thread to a different file.
+This technique may be useful for debugging.
+<P>
+<OL>
+<A HREF="Threads/mout.java">Sending Each Thread Output to a Different File.</A>
+</OL>
+</P>
+
+<P>
+Two threads doing <TT>N=N+1</TT> at about the same time
+is called a <I>race condition</I> since one of the updates
+can get lost.
+In general, race conditions are possible when
+<UL>
+<LI> two or more threads share data,
+<LI> they are reading and writing the shared data concurrently,
+<LI> and the final result depends on who does what when.
+</UL>
+</P>
+
+<P>
+Three different kinds of race conditions
+are illustrated with Java programs.
+</P>
+
+<P>
+Multiple threads doing <TT>sum=fn(sum,m)</TT>
+to the shared variable <TT>sum</TT> is a race condition like <TT>N=N+1</TT>.
+Note that one <TT>Racer</TT> object is created; then two threads
+are created in that object and the two threads share the <TT>sum</TT>
+variable.
+The Windows 95 sample runs show that if <TT>M</TT> is large enough,
+the threads run in pseudo parallel due to time slicing;
+the Solaris sample runs show there is no time slicing.
+<P>
+<OL>
+<A HREF="Threads/race.java">A Race Condition.</A>
+</OL>
+</P>
+
+<P>
+There is a fixed $10 million in this bank (10,000 accounts that each start
+out with $1000) but the auditor sometimes sees more, sometimes less.
+If the bank auditor is adding up the account balances while some funds
+are being moved from one account to another,
+an inaccurate total can be calculated.
+Can you explain how more money than is really there shows up sometimes
+in the sample output?
+<P>
+<OL>
+<A HREF="Threads/rac2.java">A Different Kind of Race Condition.</A>
+</OL>
+</P>
+
+<P>
+If two threads try to manipulate a queue at the same time,
+a node can get lost.
+Remember that the two threads may be executing in round-robin fashion
+on a shared CPU and that context switches can occur at any time.
+<P>
+<OL>
+<A HREF="Threads/qrac.java">A Queue Race Condition.</A>
+</OL>
+</P>
+
+<P>
+The following sequence of queue snapshots shows node 4 not in the queue
+even though thread A appended it.
+<P>
+<OL>
+<IMG SRC="Threads/qrac.gif">
+</OL>
+</P>
+
+<P>
+These examples show that concurrently executing threads that share
+data need to synchronize their operations and processing in order to
+avoid race conditions on shared data.
+Thread synchronization can be done with flag variables and <I>busy waiting</I>,
+as this example shows.
+Since it uses a lot of CPU cycles, busy waiting is inefficient.
+Blocking somehow would be better.
+<P>
+<OL>
+<A HREF="Threads/bwbb.java">Busy Waiting Bounded Buffer
+for a Producer and Consumer.</A>
+<P>
+<A HREF="Threads/bbpc.java">Producer and Consumer Driver.</A>
+</OL>
+</P>
+
+<P>
+We can try to remove busy waiting from the bounded buffer
+by using the thead <TT>suspend()</TT> and <TT>resume()</TT> methods,
+but we end up introducing race conditions.
+It is possible, if a context switch occurs at just the ``right'' time,
+for both the producer and the consumer to become suspended:
+the producer because the bounded buffer is full and
+the consumer waiting for a <TT>resume()</TT> that never happens.
+Do you see how?
+<P>
+<OL>
+<A HREF="Threads/srbb.java">Suspend/Resume Bounded Buffer
+for a Producer and Consumer.</A>
+</OL>
+</P>
+
+<P>
+A <I>critical section</I> is a block
+of code in a thread that accesses one or more shared variables
+in a read-update-write fashion.
+In such a situation we want <I>mutual exclusion</I>:
+only one thread at a time can access (read-update-write) a shared
+variable at a time.
+The <I>mutual exclusion problem</I> is
+how to keep two or more threads from being in their critical sections
+at the same time, where we make
+no assumptions about the number of CPUs or their relative speeds
+A thread outside its critical section should not keep other threads
+outside their critical sections from entering,
+also called a ``safety'' property (absence of unnecessary delay).
+And no thread should have to wait forever to enter its critical section,
+also called a ``liveness'' property (eventual entry).
+</P>
+
+<P>
+An <I>atomic action</I> ``makes an indivisible state transition:
+any intermediate state that might exist in the implementation of the
+action must not be visible to other threads''
+(p. 60 Andrews' Concurrent Programming book).
+This means that nothing from another thread can be interleaved in the
+implementation of the action for it to be atomic.
+Critical sections need to be done as if they were one atomic action
+to avoid race conditions.
+</P>
+
+<P>
+The mutual exclusion problem is
+to devise a pre-protocol and a post-protocol based on either
+hardware or software
+<UL>
+  <LI> that prevent two threads from being in their critical sections
+        at the same time,
+  <LI> that have the desirable safety and liveness properties,
+  <LI> and that allow critical sections to be executed atomically.
+</UL>
+The ground rules are
+<UL>
+ <LI> a load/store register architecture,
+ <LI> multiple concurrently executing threads are sharing data,
+ <LI> single or multiple CPUs where we cannot make relative speed
+      assumptions,
+ <LI> accesses to shared variables can be interleaved if two threads
+      are in their critical sections at the same time,
+ <LI> threads may not halt in their pre- or post-protocols,
+ <LI> threads may not halt in their critical sections,
+ <LI> threads may halt outside their critical sections.
+</UL>
+</P>
+
+<P>
+Thread Ti, i = 1, 2, 3, ...
+<OL>
+<PRE>
+while (true) {
+   outsideCS();
+   wantToEnterCS(i);   // pre-protocol
+   insideCS();
+   finishedInCS(i);    // post-protocol
+}
+</PRE>
+</OL>
+</P>
+
+<P>
+This sequence of examples shows successful and unsuccessful attempts to solve
+the mutual exclusion problem in software without specialized hardware
+instructions like test-and-set.
+<P>
+<OL>
+<A HREF="Threads/atts.java">Testing the Attempts.</A>
+<P>
+<A HREF="Threads/att1.java">First Attempt: Strict Alternation.</A>
+<P>
+<A HREF="Threads/att2.java">Second Attempt: Check Other's Flag Variable, Then Set Own.</A>
+<P>
+<A HREF="Threads/att3.java">Third Attempt: Set Own Flag Variable, Then Check Other's.</A>
+<P>
+<A HREF="Threads/att4.java">Fourth Attempt: Back Off.</A>
+<P>
+<A HREF="Threads/attd.java">Dekker's Solution: Take Turns Backing Off.</A>
+<P>
+<A HREF="Threads/attp.java">Peterson's Shorter Solution.</A>
+<P>
+<A HREF="Threads/bak2.java">Lamport's Bakery Algorithm: Two Threads Only.</A>
+<P>
+<A HREF="Threads/bakn.java">Lamport's Bakery Algorithm: Arbitrary Number of Threads.</A>
+</OL>
+</P>
+
+<H3>Laboratory Exercises</H3>
+
+<P>
+<OL>
+<LI>Use the <A HREF="Threads/beep.java">``beep''</A> program to determine
+    if your platform time slices threads.
+<LI>Try some other values for the <TT>-M</TT> command line argument of the
+    <A HREF="Threads/race.java">``race''</A> program to determine the
+    approximate time slice size on your system.
+<LI>What can go wrong (race condition) in the
+    <A HREF="Threads/bwbb.java">busy waiting bounded buffer</A>
+    if there is more than one producer thread and/or
+    more than one consumer thread?
+<LI><A HREF="Labs/race.html">Race Conditions</A>
+<LI><A HREF="Labs/suspendResume.html">More Race Conditions</A>
+<LI><A HREF="Labs/multithreadedAQ.html">Multithreaded Adaptive Quadrature</A>
+<LI><A HREF="Labs/MTuniTSPnosync.html">Unidirectional TSP</A>
+<LI><A HREF="Labs/golMT.html">``Game of Life''</A>
+<LI>Read the following article.
+    <UL><P>Nancy G. Leveson and Clark S. Turner,
+    ``An Investigation of the Therac-25 Accidents,''
+    <I>IEEE Computer</I>, Vol. 26, No. 7, July 1993.</P></UL>
+    Summarize the poor concurrent programming practices described in
+    the article.
+</OL>
+</P>
+
+<HR>
+
+<P>
+Last modified 30 December 1997.
+</P>
+
+<P>
+<EM>&#169 1997 Stephen J. Hartley<EM>
+</P>
+
+<P>
+<ADDRESS><A HREF="http://www.mcs.drexel.edu/~shartley">SJH</A></ADDRESS>
+<ADDRESS>
+<A HREF="mailto:shartley@mcs.drexel.edu">shartley@mcs.drexel.edu</A>
+</ADDRESS>
+</P>
+</BODY>
+</HTML>

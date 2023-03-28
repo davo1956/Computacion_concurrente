@@ -1,0 +1,77 @@
+<HTML>
+<HEAD>
+<TITLE>Barrier Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>MultiThreaded Barrier Unidirectional TSP</H1>
+
+<P>
+This is a semaphore programming assignment.
+Take your multithreaded unidirectional TSP Java program,
+the one that works backwards from right to left with a thread in each row,
+and use a
+<A HREF="../lib/Synchronization/Barrier.java">barrier</A>
+(implemented with semaphores)
+for synchronization instead of the <TT>nap()</TT> kludge.
+For each row in the matrix, create an independent thread that works backwards
+from column <I>n</I> to column 1, calculating the minimum path from that
+column forward (to the right), as we discussed in class.
+Use the barrier <TT>gate(j)</TT> method to force each thread to wait for
+all the other threads to finish their row computations before proceeding
+to the next row to the left.
+</P>
+
+<H2>What Is A Barrier?</H2>
+
+<P>
+A <I>barrier</I> is a synchronization object, like a semaphore.
+A barrier object can be created for a bunch of threads and used by
+them for synchronization and coordination, like a semaphore.
+The 
+<A HREF="../lib/Synchronization/Barrier.java">barrier</A>
+class is actually implemented with semaphores.
+The basic idea is that the barrier blocks each of the threads until all of them
+have reached a certain point in their code, then they are all realeased
+after they have all gotten there.
+Each thread calls <TT>b.gate(j)</TT> when it reaches the ``barrier''
+point in its code.
+Here <TT>b</TT> is a reference to the barrier object and <TT>i</TT> is
+the thread number or identifier (in your TSP program, the row number
+the thread is working on).
+After all threads have called <TT>gate()</TT>, they are all released.
+In other words, each thread is blocked at its <TT>gate()</TT> call
+until the last thread in the bunch finally calls <TT>gate()</TT>.
+Then they are all released to do more computation until they
+call <TT>gate()</TT> again.
+</P>
+
+<P>
+If each thread is executing in its own object, probably the case in your
+TSP programs, then only create one barrier object, say in <TT>main()</TT>,
+and pass it to the constructors of the thread objects.
+</P>
+
+<P>
+There is a one dimensional and a two dimensional constructor in the
+barrier class.
+Use the one dimensional one for this assignment since there is a thread
+for each row of the weight matrix.
+</P>
+
+<P>
+Here is a
+<A HREF="../Parallel/grba.java">two dinemsional</A>
+example from Chapter 7 of the text.
+</P>
+
+<P>
+Animate your program using
+<A HREF="../lib/XtangoAnimation/XtangoAnimator.java">
+<TT>XtangoAnimator.java</TT></A>.
+First do the base assignment as specified above and turn it in.
+Then do an animation of it as a separate program.
+</P>
+
+</BODY>
+</HTML>

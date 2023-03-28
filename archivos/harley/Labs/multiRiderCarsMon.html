@@ -1,0 +1,32 @@
+<HTML>
+<HEAD>
+<TITLE>Monitor Programming Assignment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<H1>Multiple-Person Bumper Car Ride Monitor</H1>
+
+<P>
+This is Exercise 5.14 in the text.
+Remember that Java monitors are `signal and continue' so be sure
+to think about the ramifications of this as you design your monitor.
+</P>
+
+<P>
+No semaphores and no busy waiting allowed!
+Do not use <CODE>nap()</CODE> within a monitor <TT>synchronized</TT> method.
+Do you see why?
+Only three <TT>nap()</TT>'s are allowed in this program:
+riders wandering, cars bumping, and one in <TT>main()</TT> to shutdown
+the simulation.
+</P>
+
+<P>
+If you have not already done so,
+animate your program using
+<A HREF="../lib/XtangoAnimation/XtangoAnimator.java">
+<TT>XtangoAnimator.java</TT></A>.
+</P>
+
+</BODY>
+</HTML>
