@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.11.16)  28 MAR 2023 10:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.11.16)  29 MAR 2023 19:36
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -79,6 +79,11 @@ Package: iftex 2022/02/03 v1.0f TeX engine tests
 \Gm@layouthoffset=\dimen148
 \Gm@layoutvoffset=\dimen149
 \Gm@dimlist=\toks20
+) (/usr/share/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2020-07-07 v1.5u LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks21
+\verbatim@line=\toks22
+\verbatim@in@stream=\read3
 ) (/usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2021/10/31 v2.13 LaTeX color extensions (UK)
  (/usr/share/texmf-dist/tex/latex/graphics-cfg/color.cfg
@@ -136,15 +141,15 @@ File: pppdftex.def 2022/01/29 v0.5u Pdfpages driver for pdfTeX (AM)
 )
 \pdfpages@includegraphics@status=\count268
 \AM@pagebox=\box50
-\AM@global@opts=\toks21
+\AM@global@opts=\toks23
 \AM@pagecnt=\count269
-\AM@toc@title=\toks22
+\AM@toc@title=\toks24
 \c@AM@survey=\count270
 \AM@templatesizebox=\box51
 ) (/usr/share/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count271
 \lst@gtempboxa=\box52
-\lst@token=\toks23
+\lst@token=\toks25
 \lst@length=\count272
 \lst@currlwidth=\dimen157
 \lst@column=\count273
@@ -182,22 +187,22 @@ LaTeX Info: Redefining \% on input line 8.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Info: Redefining \. on input line 23.
-LaTeX Info: Redefining \% on input line 23.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Info: Redefining \. on input line 24.
+LaTeX Info: Redefining \% on input line 24.
  (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count280
@@ -205,12 +210,12 @@ LaTeX Info: Redefining \% on input line 23.
 \scratchbox=\box57
 \nofMPsegments=\count281
 \nofMParguments=\count282
-\everyMPshowfont=\toks24
+\everyMPshowfont=\toks26
 \MPscratchCnt=\count283
 \MPscratchDim=\dimen167
 \MPnumerator=\count284
 \makeMPintoPDFobject=\count285
-\everyMPtoPDFconversion=\toks25
+\everyMPtoPDFconversion=\toks27
 ) (/usr/share/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -253,7 +258,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 23.
+(lastpage)             ! on input line 24.
 (/usr/share/texmf-dist/tex/latex/pdflscape/pdflscape.sty
 Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
  (/usr/share/texmf-dist/tex/latex/graphics/lscape.sty
@@ -265,37 +270,64 @@ Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 <Portada.pdf, id=1, 597.50829pt x 845.0471pt>
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf>
-Package pdftex.def Info: Portada.pdf  used on input line 24.
+Package pdftex.def Info: Portada.pdf  used on input line 25.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf>
-Package pdftex.def Info: Portada.pdf  used on input line 24.
+Package pdftex.def Info: Portada.pdf  used on input line 25.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 <Portada.pdf, id=4, page=1, 597.50829pt x 845.0471pt>
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 25.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 25.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 25.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 25.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
 File: Portada.pdf Graphic file (type pdf)
 <use Portada.pdf, page 1>
-Package pdftex.def Info: Portada.pdf , page1 used on input line 24.
+Package pdftex.def Info: Portada.pdf , page1 used on input line 25.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
  [1
 
  <./Portada.pdf{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}>]
-Underfull \hbox (badness 10000) in paragraph at lines 31--33
+Underfull \hbox (badness 10000) in paragraph at lines 32--34
+
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 56.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 56.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 56.
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
+
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[2]
+
+LaTeX Warning: Characters dropped after `\end{verbatim}' on input line 87.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 89--90
 
  []
 
@@ -308,23 +340,23 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[2] (./main.aux
+[3] (./main.aux
 LaTeX Info: Redefining \. on input line 8.
 LaTeX Info: Redefining \% on input line 8.
 ) ) 
 Here is how much of TeX's memory you used:
- 6246 strings out of 478238
- 97694 string characters out of 5850455
- 419086 words of memory out of 5000000
- 24443 multiletter control sequences out of 15000+600000
- 471075 words of font info for 34 fonts, out of 8000000 for 9000
+ 6310 strings out of 478238
+ 98856 string characters out of 5850455
+ 426733 words of memory out of 5000000
+ 24497 multiletter control sequences out of 15000+600000
+ 473682 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,17n,64p,256b,430s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on main.pdf (2 pages, 340551 bytes).
+ 55i,17n,64p,256b,457s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on main.pdf (3 pages, 389681 bytes).
 PDF statistics:
- 76 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 107 PDF objects out of 1000 (max. 8388607)
+ 66 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
