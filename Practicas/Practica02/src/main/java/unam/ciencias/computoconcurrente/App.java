@@ -1,63 +1,40 @@
+/**
+ * Computación Concurrente
+ * Práctica 2 Laboratorio
+ * @author Manjarrez Angeles Valeria Fernanda.
+ * @author Pérez Jacome David.
+*/
 package unam.ciencias.computoconcurrente;
-import java.util.concurrent.Semaphore;
+
 
 public class App {
 
-    private static final int NUM_FILOSOFOS = 5;
-    private static Semaphore[] tenedores = new Semaphore[NUM_FILOSOFOS];
-    private static Semaphore maximoFilosofos = new Semaphore(NUM_FILOSOFOS - 1);
-    private static boolean[] comido = new boolean[NUM_FILOSOFOS];
-
+    public static Filosofo[] mesaFilosofos(int n) {
+        Fork[] tenedores = new Fork[n];
+        for (int i = 0; i < n; i++) {
+            tenedores[i] = new Fork(i);
+        }
+        Filosofo[] filosofos = new Filosofo[n];
+        for (int i = 0; i < n; i++) {
+            Fork tenedorIzquierdo = tenedores[i];
+            Fork tenedorDerecho = tenedores[(i + 1) % n];
+            filosofos[i] = new Filosofo(i, tenedorIzquierdo, tenedorDerecho);
+        }
+        return filosofos;
+    }
 
     public static void main(String[] a) throws InterruptedException {
-    
-        
-        for (int i = 0; i < NUM_FILOSOFOS; i++) {
-            tenedores[i] = new Semaphore(1);
-            comido[i] = false;
+        Filosofo[] filosofoPrueba = mesaFilosofos(5);
+        Thread arrayThread[];
+        arrayThread = new Thread[5];
+        for (int i = 0; i < 5; i++){
+            Thread threadN = new Thread(filosofoPrueba[i]);
+            arrayThread[i] = threadN;
+            threadN.start();
         }
-
-        Thread[] filosofos = new Thread[NUM_FILOSOFOS];
-
-        for (int i = 0; i < NUM_FILOSOFOS; i++) {
-            final int index = i;
-            filosofos[i] = new Thread(() -> {
-                while (!comidoTodos()) {
-                    try {
-                        System.out.println("Filósofo " + index + " está pensando");
-                        Thread.sleep((long) (Math.random() * 10000));
-
-                        maximoFilosofos.acquire();
-                        tenedores[index].acquire();
-                        tenedores[(index + 1) % NUM_FILOSOFOS].acquire();
-
-                        System.out.println("Filósofo " + index + " está comiendo");
-                        Thread.sleep((long) (Math.random() * 5000));
-                        comido[index] = true;
-
-                        tenedores[index].release();
-                        tenedores[(index + 1) % NUM_FILOSOFOS].release();
-                        maximoFilosofos.release();
-
-                        System.out.println("Filósofo " + index + " ha terminado de comer");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                System.out.println("Todos han comido por lo menos una vez");
-            });
-
-            filosofos[i].start();
+        for (Thread thread : arrayThread) {
+            thread.join();
         }
     }
 
-    private static boolean comidoTodos() {
-        for (boolean b : comido) {
-            if (!b) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
