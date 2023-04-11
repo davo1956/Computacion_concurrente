@@ -10,7 +10,7 @@ import java.util.concurrent.Semaphore;
 
 public class Filosofo implements Runnable {
 
-    private static final Semaphore semaforo = new Semaphore(5);
+    private static final Semaphore semaforo = new Semaphore(4);
     public static int DEFAULT_TABLE_SIZE = 5;
     private final int id;
     private final Fork tenedorIzquierdo;
