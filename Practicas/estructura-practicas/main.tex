@@ -37,23 +37,85 @@ para ejemplificar tu respuesta.\\
     \item ¿Qué es un monitor? (2 puntos).
     \vspace{2mm}
     
-    \textbf{Respuesta.}
+    \textbf{Un monitor es (objeto sincronizado) una herramienta que se usa para sincronizar el acceso a los recursos compartidos entre procesos o hilos.
+    consta de variables de condición y de estado; las de estado contienen información del recurso compartido, las de condición se usan para esperar o notificar
+    a otros hilos o procesos sobre cambios en el estado del recurso compartido.}
     \item ¿Qué es un proceso distribuido? (2 puntos).
     \vspace{2mm}
     
-    \textbf{Respuesta.}
+    \textbf{Es un tipo de proceso informático que se ejecuta en una red de computadoras interconectadas y que colaboran entre sí 
+    para lograr un objetivo común. En un proceso distribuido, cada nodo en la red tiene su propio procesador y memoria, y los nodos se 
+    comunican entre sí a través de mensajes para compartir información y coordinar sus acciones.}
     \item ¿Cúales son las diferencias entre Computo Concurrente y Computo Paralelo? (2 puntos).
     \vspace{2mm}
     
-    \textbf{Respuesta}
+    \textbf{Simplemente, El cómputo concurrente se refiere al proceso de ejecutar varias tareas al mismo tiempo en un sistema independientemente de si se ejecutan en diferentes núcleos o procesadores.
+    Mientras que el cómputo paralelo se refiere a la ejecución simultánea de tareas en diferentes núcleos o procesadores de un sistema, cada tarea se ejecuta en un procesador o núcleo diferente y puede trabajar en diferentes partes del problema}
     \item Haz un TDA de monitores (4 puntos).
     \vspace{2mm}
     
     \textbf{TDA para monitores:}\\
     \begin{verbatim}
-        / Declaración del TDA de semáforos
-        
-TDA_Monitor:
+        // Definición del tipo de dato abstracto Monitor
+
+Monitor Monitor {
+   // Variables privadas
+   int variable1;
+   bool variable2;
+   // Variables de condición
+   CondVar condVar1;
+   CondVar condVar2;
+   
+   // Métodos públicos
+   Procedure Inicializar() {
+      // Inicialización de variables privadas
+      variable1 = 0;
+      variable2 = false;
+      // Inicialización de variables de condición
+      condVar1.Inicializar();
+      condVar2.Inicializar();
+   }
+   
+   Procedure Acceder() {
+      // Adquirir el monitor
+      Monitor.Enter(this);
+      // Realizar operaciones en el recurso compartido
+      variable1 = 1;
+      variable2 = true;
+      // Notificar a otros hilos o procesos
+      condVar1.Signal();
+      // Liberar el monitor
+      Monitor.Exit(this);
+   }
+   
+   Procedure Esperar() {
+      // Adquirir el monitor
+      Monitor.Enter(this);
+      // Esperar a que ocurra una condición
+      while(!variable2) {
+         condVar1.Wait();
+      }
+      // Realizar operaciones en el recurso compartido
+      variable1 = 2;
+      // Notificar a otros hilos o procesos
+      condVar2.Signal();
+      // Liberar el monitor
+      Monitor.Exit(this);
+   }
+   
+   Procedure Liberar() {
+      // Adquirir el monitor
+      Monitor.Enter(this);
+      // Realizar operaciones en el recurso compartido
+      variable1 = 0;
+      variable2 = false;
+      // Notificar a otros hilos o procesos
+      condVar2.Signal();
+      // Liberar el monitor
+      Monitor.Exit(this);
+   }
+}
+
 
     
     \end{verbatim}\\

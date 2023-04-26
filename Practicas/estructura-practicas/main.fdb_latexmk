@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1682485566 "/home/david/semestre_2023/concurrente/Practicas/estructura-practicas/main.tex" "main.pdf" "main" 1682485567 0
-  "/home/david/semestre_2023/concurrente/Practicas/estructura-practicas/main.tex" 1682485566 1703 90f0be16582935b5a7769a4dfd094dfd ""
+["pdflatex"] 1682486841 "/home/david/semestre_2023/concurrente/Practicas/estructura-practicas/main.tex" "main.pdf" "main" 1682486842 0
+  "/home/david/semestre_2023/concurrente/Practicas/estructura-practicas/main.tex" 1682486841 4289 d68494b407f0d784b53f4ff274d66663 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1680514707 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1680514707 1324 c910af8c371558dc20f2d7822f66fe64 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1680514707 1288 655e228510b4c2a1abe905c368440826 ""
@@ -59,8 +59,8 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1681265962 336600 6f90c65e159aaf8faaa6ea56bf6655c4 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1681265899 8204104 7833c990d65d676da9d1bbc544cc58c3 ""
   "Portada.pdf" 1682485192 328175 ba67be10a413024f14a903b1d1a9af06 ""
-  "main.aux" 1682485567 276 cfded1e150f39fa521d07b9e9460609f "pdflatex"
-  "main.tex" 1682485566 1703 90f0be16582935b5a7769a4dfd094dfd ""
+  "main.aux" 1682486842 276 0ab98a66168b0f9b70e0f2853be4d9f3 "pdflatex"
+  "main.tex" 1682486841 4289 d68494b407f0d784b53f4ff274d66663 ""
   (generated)
   "main.aux"
   "main.log"
